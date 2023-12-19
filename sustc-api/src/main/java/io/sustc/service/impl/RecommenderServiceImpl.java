@@ -5,6 +5,7 @@ import io.sustc.dto.DanmuRecord;
 import io.sustc.dto.UserRecord;
 import io.sustc.dto.VideoRecord;
 import io.sustc.service.RecommenderService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 @Slf4j
+@Service
+@Data
 public class RecommenderServiceImpl implements RecommenderService {
+    @Autowired
     private DataSource dataSource;
     /**
      * Recommends a list of top 5 similar videos for a video.
