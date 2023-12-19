@@ -2,6 +2,7 @@ package io.sustc.service.impl;
 
 import io.sustc.dto.AuthInfo;
 import io.sustc.service.DanmuService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-@Service
 
 @Slf4j
+@Service
+@Data
 public class DanmuServiceImpl implements DanmuService {
+    @Autowired
     private DataSource dataSource;
     static long id_max = -1;
     public void getID(){
@@ -86,7 +89,10 @@ public class AuthInfo {
     }
     @Override
     public long sendDanmu(AuthInfo auth, String bv, String content, float time) {
-        if(!checkUser(auth) || Objects.equals(content, "") || content == null) return -1;
+        if(!checkUser(auth) || Objects.equals(content, "") || content == null) {
+            System.out.println("The auth is invalid");
+            return -1;
+        }
         if(id_max == -1) getID();
         String sql_insertDanmu = "insert into values (?, ?, ?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
@@ -119,38 +125,46 @@ public class AuthInfo {
 
     @Override
     public List<Long> displayDanmu(String bv, float timeStart, float timeEnd, boolean filter) {
-
-        List<Long> danmuID = new ArrayList<>();
-
-        if(timeStart < 0 || timeEnd < 0 || timeEnd < timeStart) return null;
-
-        long duration;
-        String sql_findDuration = "select duration\n" +
-                "from videos where bv = '?';";
+        if(timeStart < 0 || timeEnd < 0 || timeEnd < timeStart) {
+            return null;
+        }
+        long duration = 0;
+        String sql_findDuration = "select duration from videos where bv = ?;";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql_findDuration)){
             stmt.setString(1,bv);
             log.info("SQL:{}",stmt);
             ResultSet rs = stmt.executeQuery();//获取结果集
-            duration = rs.getLong("duration");//找到bv，找到时长
+            if (rs.next()) { // 移动游标到第一行
+                duration = rs.getLong("duration"); // 获取时长
+            } else {
+                System.out.println("未找到匹配的记录");//delete
+                return null;
+            }
         } catch (SQLException e) {//找不到bv，错误
+            System.out.println("发生 SQL 异常: " + e.getMessage());//delete
             return null;
             //throw new RuntimeException(e);检查是否代码正确
         }
 
-        if(timeStart > duration || timeEnd > duration) return null;
+        if(timeStart > duration || timeEnd > duration) {
+            System.out.println("wrong time");//delete
+            return null;
+        }
         String sql_findID;
         if(!filter){
             sql_findID = "select id\n" +
-                    "from Danmu where bv = '?'\n" +
+                    "from Danmu where bv = ?\n" +
                     "and time between ? and ? ;";
         }else {
-            sql_findID = "select min(id)\n" +
+            sql_findID = "select id\n" +
                     "from Danmu\n" +
-                    "where bv = '?'\n" +
+                    "where bv = ?\n" +
                     "and time between ? and ?\n" +
-                    "group by content;";
+                    "group by content, id;";
         }
+
+        List<Long> danmuID = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql_findID)){
             stmt.setString(1,bv);
@@ -162,10 +176,14 @@ public class AuthInfo {
                 long id = rs.getLong("id");
                 danmuID.add(id);
             }
+            if(danmuID.size() != 0){
+                System.out.println("success");//delete
+                return danmuID;
+            }
         }catch (SQLException e){
-            throw new RuntimeException(e);//检测sql正确
+            System.out.println("wrong message" + e);//delete
         }
-        return danmuID;
+        return null;
     }
     @Override
     public boolean likeDanmu(AuthInfo auth, long id) {//danmu的id
