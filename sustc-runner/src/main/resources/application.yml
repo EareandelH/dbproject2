@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/terminal_project  # change this to your own jdbc url
+    username: postgres  # change this to your own username (avoid using a superuser)
+    password: wzhwzh041229  # change this to your own password
+    hikari:
+      auto-commit: true
+---
+
+benchmark:
+  data-path: data
+  student-mode: true
