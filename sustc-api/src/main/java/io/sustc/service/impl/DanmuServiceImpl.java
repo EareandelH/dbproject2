@@ -27,7 +27,6 @@ public class DanmuServiceImpl implements DanmuService {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql_selectID)) {
             log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
-
             ResultSet rs = stmt.executeQuery();//执行查询操作，用于获取查询结果集
             rs.next();
             id_max = rs.getInt(1);
@@ -83,7 +82,7 @@ public class AuthInfo {
         } catch (SQLException e) {
             return false;
         }
-        if(auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
+        if(auth.getPassword() != null && !auth.getPassword().equals(password) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
         if(qq == null && wechat == null && password == null) return false;//三个同时无
         return true;
     }
@@ -95,8 +94,9 @@ public class AuthInfo {
         }
         if(id_max == -1) getID();
         String sql_insertDanmu = "insert into values (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_insertDanmu)) {
+        try {
+            Connection conn = dataSource.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql_insertDanmu);
             id_max++;
             LocalDateTime currentDateTime = LocalDateTime.now(); // 获取当前日期时间
             Timestamp timestamp = Timestamp.valueOf(currentDateTime);
@@ -108,14 +108,17 @@ public class AuthInfo {
             stmt.setTimestamp(6, timestamp);//时间格式可能需要修改
             log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
             int affectedRows = stmt.executeUpdate();//执行插入操作，返回受影响的行数
+            conn.commit();
             if (affectedRows > 0) {
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // 返回插入的danmu的id
                 }else {
+                    conn.rollback();
                     return -1;
                 }
             }else {
+                conn.rollback();
                 return -1;
             }
         } catch (SQLException e) {//找不到相应的bv
@@ -181,7 +184,7 @@ public class AuthInfo {
                 return danmuID;
             }
         }catch (SQLException e){
-            System.out.println("wrong message" + e);//delete
+            System.out.println("wrong message: " + e);//delete
         }
         return null;
     }
@@ -200,8 +203,8 @@ public class AuthInfo {
             if (affectedRows > 0) {//说明找到id
                 String sql_check_likeBy = "select d.id\n" +
                         "from Danmu_like d\n" +
-                        "where id = 213\n" +
-                        "and d.likeBy = 123;";
+                        "where id = ?\n" +
+                        "and d.likeBy = ?;";
                 try (PreparedStatement stmt_2 = conn.prepareStatement(sql_check_likeBy)){
                     stmt_2.setLong(1, id);
                     stmt_2.setLong(2,auth.getMid());
@@ -214,20 +217,23 @@ public class AuthInfo {
                             stmt_3.setLong(2,auth.getMid());
                             log.info("SQL:{}",stmt_3);
                             stmt.executeUpdate();
+                            conn.commit();
                             return true;
                         }
-                    }else {//未点过赞
-                        String sql_like = "insert into Danmu values (?, ?)";
+                    }else{//未点过赞
+                        String sql_like = "insert into Danmu_like values (?, ?)";
                         try (PreparedStatement stmt_3 = conn.prepareStatement(sql_like)){
                             stmt_3.setLong(1,id);
                             stmt_3.setLong(2,auth.getMid());
                             log.info("SQL:{}",stmt_3);
                             stmt.executeUpdate();
+                            conn.commit();
                             return true;
                         }
                     }
                 }
             }else {//找不到这个id
+                conn.rollback();
                 return false;
             }
         }catch (SQLException e){
