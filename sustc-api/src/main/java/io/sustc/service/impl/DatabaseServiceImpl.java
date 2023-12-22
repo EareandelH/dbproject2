@@ -31,7 +31,7 @@ public class DatabaseServiceImpl implements DatabaseService {
      * Learn more: <a href="https://www.baeldung.com/spring-dependency-injection">Dependency Injection</a>
      */
     @Autowired
-    private DataSource dataSource;
+    //private DataSource dataSource;
 
     @Override
     public List<Integer> getGroupMembers() {
@@ -60,7 +60,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql_Danmu_like = "insert into Danmu_like (id, likeBy) values (?, ?)";
         final int BATCH_SIZE = 100000;
         final int BATCH2_SIZE = 100000;
-        try (Connection conn = dataSource.getConnection()) {
+        Connection conn;
+        try {
+            conn = ConnectionPool.getConnection();
             PreparedStatement statement_user = conn.prepareStatement(sql_user);
             PreparedStatement statement_following = conn.prepareStatement(sql_following);
             PreparedStatement statement_video = conn.prepareStatement(sql_video);
@@ -313,8 +315,10 @@ public class DatabaseServiceImpl implements DatabaseService {
                 "        EXECUTE 'TRUNCATE TABLE ' || QUOTE_IDENT(t.tablename) || ' CASCADE;';\n" +
                 "    END LOOP;\n" +
                 "END $$;\n";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        Connection conn;
+        try{
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -324,9 +328,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer sum(int a, int b) {
         String sql = "SELECT ?+?";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        Connection conn;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, a);
             stmt.setInt(2, b);
             log.info("SQL: {}", stmt);

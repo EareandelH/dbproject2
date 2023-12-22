@@ -20,7 +20,7 @@ import java.util.Objects;
 @Data
 public class DanmuServiceImpl implements DanmuService {
     @Autowired
-    //private DataSource dataSource;
+    private DataSource dataSource;
     static long id_max = -1;
     public void getID(){
         String sql_selectID = "select count(*) from Danmu;";
