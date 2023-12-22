@@ -2,6 +2,7 @@ package io.sustc.service.impl;
 
 import io.sustc.dto.AuthInfo;
 import io.sustc.service.DanmuService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-@Service
 
 @Slf4j
+@Service
+@Data
 public class DanmuServiceImpl implements DanmuService {
     @Autowired
     private DataSource dataSource;
@@ -25,7 +27,6 @@ public class DanmuServiceImpl implements DanmuService {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql_selectID)) {
             log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
-
             ResultSet rs = stmt.executeQuery();//执行查询操作，用于获取查询结果集
             rs.next();
             id_max = rs.getInt(1);
@@ -81,17 +82,21 @@ public class AuthInfo {
         } catch (SQLException e) {
             return false;
         }
-        if(auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
+        if(auth.getPassword() != null && !auth.getPassword().equals(password) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
         if(qq == null && wechat == null && password == null) return false;//三个同时无
         return true;
     }
     @Override
     public long sendDanmu(AuthInfo auth, String bv, String content, float time) {
-        if(!checkUser(auth) || Objects.equals(content, "") || content == null) return -1;
+        if(!checkUser(auth) || Objects.equals(content, "") || content == null) {
+            System.out.println("The auth is invalid");
+            return -1;
+        }
         if(id_max == -1) getID();
         String sql_insertDanmu = "insert into values (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_insertDanmu)) {
+        try {
+            Connection conn = dataSource.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql_insertDanmu);
             id_max++;
             LocalDateTime currentDateTime = LocalDateTime.now(); // 获取当前日期时间
             Timestamp timestamp = Timestamp.valueOf(currentDateTime);
@@ -103,14 +108,17 @@ public class AuthInfo {
             stmt.setTimestamp(6, timestamp);//时间格式可能需要修改
             log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
             int affectedRows = stmt.executeUpdate();//执行插入操作，返回受影响的行数
+            conn.commit();
             if (affectedRows > 0) {
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // 返回插入的danmu的id
                 }else {
+                    conn.rollback();
                     return -1;
                 }
             }else {
+                conn.rollback();
                 return -1;
             }
         } catch (SQLException e) {//找不到相应的bv
@@ -120,38 +128,46 @@ public class AuthInfo {
 
     @Override
     public List<Long> displayDanmu(String bv, float timeStart, float timeEnd, boolean filter) {
-
-        List<Long> danmuID = new ArrayList<>();
-
-        if(timeStart < 0 || timeEnd < 0 || timeEnd < timeStart) return null;
-
-        long duration;
-        String sql_findDuration = "select duration\n" +
-                "from videos where bv = '?';";
+        if(timeStart < 0 || timeEnd < 0 || timeEnd < timeStart) {
+            return null;
+        }
+        long duration = 0;
+        String sql_findDuration = "select duration from videos where bv = ?;";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql_findDuration)){
             stmt.setString(1,bv);
             log.info("SQL:{}",stmt);
             ResultSet rs = stmt.executeQuery();//获取结果集
-            duration = rs.getLong("duration");//找到bv，找到时长
+            if (rs.next()) { // 移动游标到第一行
+                duration = rs.getLong("duration"); // 获取时长
+            } else {
+                System.out.println("未找到匹配的记录");//delete
+                return null;
+            }
         } catch (SQLException e) {//找不到bv，错误
+            System.out.println("发生 SQL 异常: " + e.getMessage());//delete
             return null;
             //throw new RuntimeException(e);检查是否代码正确
         }
 
-        if(timeStart > duration || timeEnd > duration) return null;
+        if(timeStart > duration || timeEnd > duration) {
+            System.out.println("wrong time");//delete
+            return null;
+        }
         String sql_findID;
         if(!filter){
             sql_findID = "select id\n" +
-                    "from Danmu where bv = '?'\n" +
+                    "from Danmu where bv = ?\n" +
                     "and time between ? and ? ;";
         }else {
-            sql_findID = "select min(id)\n" +
+            sql_findID = "select id\n" +
                     "from Danmu\n" +
-                    "where bv = '?'\n" +
+                    "where bv = ?\n" +
                     "and time between ? and ?\n" +
-                    "group by content;";
+                    "group by content, id;";
         }
+
+        List<Long> danmuID = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql_findID)){
             stmt.setString(1,bv);
@@ -163,10 +179,14 @@ public class AuthInfo {
                 long id = rs.getLong("id");
                 danmuID.add(id);
             }
+            if(danmuID.size() != 0){
+                System.out.println("success");//delete
+                return danmuID;
+            }
         }catch (SQLException e){
-            throw new RuntimeException(e);//检测sql正确
+            System.out.println("wrong message: " + e);//delete
         }
-        return danmuID;
+        return null;
     }
     @Override
     public boolean likeDanmu(AuthInfo auth, long id) {//danmu的id
@@ -183,8 +203,8 @@ public class AuthInfo {
             if (affectedRows > 0) {//说明找到id
                 String sql_check_likeBy = "select d.id\n" +
                         "from Danmu_like d\n" +
-                        "where id = 213\n" +
-                        "and d.likeBy = 123;";
+                        "where id = ?\n" +
+                        "and d.likeBy = ?;";
                 try (PreparedStatement stmt_2 = conn.prepareStatement(sql_check_likeBy)){
                     stmt_2.setLong(1, id);
                     stmt_2.setLong(2,auth.getMid());
@@ -197,20 +217,23 @@ public class AuthInfo {
                             stmt_3.setLong(2,auth.getMid());
                             log.info("SQL:{}",stmt_3);
                             stmt.executeUpdate();
+                            conn.commit();
                             return true;
                         }
-                    }else {//未点过赞
-                        String sql_like = "insert into Danmu values (?, ?)";
+                    }else{//未点过赞
+                        String sql_like = "insert into Danmu_like values (?, ?)";
                         try (PreparedStatement stmt_3 = conn.prepareStatement(sql_like)){
                             stmt_3.setLong(1,id);
                             stmt_3.setLong(2,auth.getMid());
                             log.info("SQL:{}",stmt_3);
                             stmt.executeUpdate();
+                            conn.commit();
                             return true;
                         }
                     }
                 }
             }else {//找不到这个id
+                conn.rollback();
                 return false;
             }
         }catch (SQLException e){
