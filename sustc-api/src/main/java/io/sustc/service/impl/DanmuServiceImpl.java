@@ -17,6 +17,7 @@ import java.util.Objects;
 
 @Slf4j
 public class DanmuServiceImpl implements DanmuService {
+    @Autowired
     private DataSource dataSource;
     static long id_max = -1;
     public void getID(){
