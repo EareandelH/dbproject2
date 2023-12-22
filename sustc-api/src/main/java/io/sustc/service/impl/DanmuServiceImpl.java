@@ -20,18 +20,22 @@ import java.util.Objects;
 @Data
 public class DanmuServiceImpl implements DanmuService {
     @Autowired
-    private DataSource dataSource;
+    //private DataSource dataSource;
     static long id_max = -1;
     public void getID(){
         String sql_selectID = "select count(*) from Danmu;";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_selectID)) {
+        Connection conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql_selectID);
             log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
             ResultSet rs = stmt.executeQuery();//执行查询操作，用于获取查询结果集
             rs.next();
             id_max = rs.getInt(1);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            ConnectionPool.releaseConnection(conn);
         }
     }
     /*
@@ -59,15 +63,18 @@ public class AuthInfo {
 }
 */
     public boolean checkUser(AuthInfo auth){
-        String sql_checkMID = "select password,qq,wechat,identity\n" +
-                "from t_user\n" +
-                "where mid = ?;";
+        String sql_checkMID = """
+                select password,qq,wechat,identity
+                from t_user
+                where mid = ?;""";
         String password;
         String qq;
         String wechat;
         String identity;
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_checkMID)){
+        Connection conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql_checkMID);
             stmt.setLong(1,auth.getMid());
             log.info("SQL:{}",stmt);
             ResultSet rs = stmt.executeQuery();//获取结果集
@@ -81,10 +88,11 @@ public class AuthInfo {
             }
         } catch (SQLException e) {
             return false;
+        }finally {
+            ConnectionPool.releaseConnection(conn);
         }
         if(auth.getPassword() != null && !auth.getPassword().equals(password) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
-        if(qq == null && wechat == null && password == null) return false;//三个同时无
-        return true;
+        return qq != null || wechat != null || password != null;//三个同时无
     }
     @Override
     public long sendDanmu(AuthInfo auth, String bv, String content, float time) {
@@ -94,8 +102,9 @@ public class AuthInfo {
         }
         if(id_max == -1) getID();
         String sql_insertDanmu = "insert into values (?, ?, ?, ?, ?, ?)";
+        Connection conn = null;
         try {
-            Connection conn = dataSource.getConnection();
+            conn = ConnectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql_insertDanmu);
             id_max++;
             LocalDateTime currentDateTime = LocalDateTime.now(); // 获取当前日期时间
@@ -123,6 +132,8 @@ public class AuthInfo {
             }
         } catch (SQLException e) {//找不到相应的bv
             return -1;
+        }finally {
+            ConnectionPool.releaseConnection(conn);
         }
     }
 
@@ -131,10 +142,12 @@ public class AuthInfo {
         if(timeStart < 0 || timeEnd < 0 || timeEnd < timeStart) {
             return null;
         }
-        long duration = 0;
+        long duration;
         String sql_findDuration = "select duration from videos where bv = ?;";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_findDuration)){
+        Connection conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql_findDuration);
             stmt.setString(1,bv);
             log.info("SQL:{}",stmt);
             ResultSet rs = stmt.executeQuery();//获取结果集
@@ -148,6 +161,8 @@ public class AuthInfo {
             System.out.println("发生 SQL 异常: " + e.getMessage());//delete
             return null;
             //throw new RuntimeException(e);检查是否代码正确
+        }finally {
+            ConnectionPool.releaseConnection(conn);
         }
 
         if(timeStart > duration || timeEnd > duration) {
@@ -156,20 +171,24 @@ public class AuthInfo {
         }
         String sql_findID;
         if(!filter){
-            sql_findID = "select id\n" +
-                    "from Danmu where bv = ?\n" +
-                    "and time between ? and ? ;";
+            sql_findID = """
+                    select id
+                    from Danmu where bv = ?
+                    and time between ? and ? ;""";
         }else {
-            sql_findID = "select id\n" +
-                    "from Danmu\n" +
-                    "where bv = ?\n" +
-                    "and time between ? and ?\n" +
-                    "group by content, id;";
+            sql_findID = """
+                    select id
+                    from Danmu
+                    where bv = ?
+                    and time between ? and ?
+                    group by content, id;""";
         }
 
         List<Long> danmuID = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_findID)){
+        conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql_findID);
             stmt.setString(1,bv);
             stmt.setDouble(2,timeStart);
             stmt.setDouble(3,timeEnd);
@@ -185,26 +204,32 @@ public class AuthInfo {
             }
         }catch (SQLException e){
             System.out.println("wrong message: " + e);//delete
+        }finally {
+            ConnectionPool.releaseConnection(conn);
         }
         return null;
     }
     @Override
     public boolean likeDanmu(AuthInfo auth, long id) {//danmu的id
         if(!checkUser(auth))return false;
-        String sql_check = "select d.id\n" +
-                "from Danmu_like d\n" +
-                "where id = ?;";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_check)){
+        String sql_check = """
+                select d.id
+                from Danmu_like d
+                where id = ?;""";
+        Connection conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql_check);
             stmt.setLong(2, id);
 
             log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
             int affectedRows = stmt.executeUpdate();//执行插入操作，返回受影响的行数
             if (affectedRows > 0) {//说明找到id
-                String sql_check_likeBy = "select d.id\n" +
-                        "from Danmu_like d\n" +
-                        "where id = ?\n" +
-                        "and d.likeBy = ?;";
+                String sql_check_likeBy = """
+                        select d.id
+                        from Danmu_like d
+                        where id = ?
+                        and d.likeBy = ?;""";
                 try (PreparedStatement stmt_2 = conn.prepareStatement(sql_check_likeBy)){
                     stmt_2.setLong(1, id);
                     stmt_2.setLong(2,auth.getMid());
@@ -238,6 +263,8 @@ public class AuthInfo {
             }
         }catch (SQLException e){
             throw new RuntimeException(e);
+        }finally {
+            ConnectionPool.releaseConnection(conn);
         }
     }
 }

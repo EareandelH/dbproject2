@@ -5,12 +5,12 @@ import io.sustc.dto.UserRecord;
 import io.sustc.dto.VideoRecord;
 import io.sustc.service.DanmuService;
 import io.sustc.service.DatabaseService;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +34,7 @@ public class DatabaseServiceImpl implements DatabaseService {
      * Learn more: <a href="https://www.baeldung.com/spring-dependency-injection">Dependency Injection</a>
      */
     @Autowired
-    private DataSource dataSource;
+    //private DataSource dataSource;
 
     @Override
     public List<Integer> getGroupMembers() {
@@ -62,7 +62,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql_Danmu_like = "insert into Danmu_like (id, likeBy) values (?, ?)";
         final int BATCH_SIZE = 500;
         final int BATCH2_SIZE = 1000;
-        try (Connection conn = dataSource.getConnection()) {
+        Connection conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
             PreparedStatement statement_user = conn.prepareStatement(sql_user);
             PreparedStatement statement_following = conn.prepareStatement(sql_following);
             PreparedStatement statement_video = conn.prepareStatement(sql_video);
@@ -284,9 +286,14 @@ public class DatabaseServiceImpl implements DatabaseService {
             conn.commit();
             statement_danmu.close();
             statement_Danmu_like.close();
-
-
         } catch (SQLException e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);//检测sql正确
         }
     }
@@ -302,20 +309,24 @@ public class DatabaseServiceImpl implements DatabaseService {
     public void truncate() {
         // You can use the default truncate script provided by us in most cases,
         // but if it doesn't work properly, you may need to modify it.
-        String sql = "DO $$\n" +
-                "DECLARE\n" +
-                "    tables CURSOR FOR\n" +
-                "        SELECT tablename\n" +
-                "        FROM pg_tables\n" +
-                "        WHERE schemaname = 'public';\n" +
-                "BEGIN\n" +
-                "    FOR t IN tables\n" +
-                "    LOOP\n" +
-                "        EXECUTE 'TRUNCATE TABLE ' || QUOTE_IDENT(t.tablename) || ' CASCADE;';\n" +
-                "    END LOOP;\n" +
-                "END $$;\n";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = """
+                DO $$
+                DECLARE
+                    tables CURSOR FOR
+                        SELECT tablename
+                        FROM pg_tables
+                        WHERE schemaname = 'public';
+                BEGIN
+                    FOR t IN tables
+                    LOOP
+                        EXECUTE 'TRUNCATE TABLE ' || QUOTE_IDENT(t.tablename) || ' CASCADE;';
+                    END LOOP;
+                END $$;
+                """;
+        Connection conn;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -325,9 +336,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Integer sum(int a, int b) {
         String sql = "SELECT ?+?";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        Connection conn;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, a);
             stmt.setInt(2, b);
             log.info("SQL: {}", stmt);
