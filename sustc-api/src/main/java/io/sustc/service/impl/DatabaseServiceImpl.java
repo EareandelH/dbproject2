@@ -60,7 +60,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql_Danmu_like = "insert into Danmu_like (id, likeBy) values (?, ?)";
         final int BATCH_SIZE = 100000;
         final int BATCH2_SIZE = 100000;
-        Connection conn;
+        Connection conn = null;
         try {
             conn = ConnectionPool.getConnection();
             PreparedStatement statement_user = conn.prepareStatement(sql_user);
@@ -288,6 +288,13 @@ public class DatabaseServiceImpl implements DatabaseService {
 
 
         } catch (SQLException e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
             throw new RuntimeException(e);//检测sql正确
         }
     }
