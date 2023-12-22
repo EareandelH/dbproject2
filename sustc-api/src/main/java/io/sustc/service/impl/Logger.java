@@ -27,7 +27,7 @@ public class Logger {
         }
 
     }
-    public static void debug(String info){
+    public void debug(String info){
         try {
             bw.write("[DEBUG] "+info);
             bw.flush();
@@ -35,7 +35,7 @@ public class Logger {
             e.printStackTrace();
         }
     }
-    public static void sql(String info){
+    public void sql(String info){
         try {
             bw.write("[SQL] "+info);
             bw.flush();
@@ -43,7 +43,7 @@ public class Logger {
             e.printStackTrace();
         }
     }
-    public static void function(String info){
+    public void function(String info){
         try {
             bw.write("[Function] "+info);
             bw.flush();

@@ -3,16 +3,15 @@ package io.sustc.service.impl;
 import io.sustc.dto.DanmuRecord;
 import io.sustc.dto.UserRecord;
 import io.sustc.dto.VideoRecord;
+import io.sustc.service.DanmuService;
 import io.sustc.service.DatabaseService;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,9 +20,9 @@ import java.util.List;
  * As long as the class is annotated and implements the corresponding interface, you can place it under any package.
  */
 @Service
+@Slf4j
 public class DatabaseServiceImpl implements DatabaseService {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(DatabaseServiceImpl.class);
     /**
      * Getting a {@link DataSource} instance from the framework, whose connections are managed by HikariCP.
      * <p>
@@ -46,6 +45,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             List<UserRecord> userRecords,
             List<VideoRecord> videoRecords
     ) {
+        long start_time = System.currentTimeMillis();
         String sql_user = "insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) " +
                 "values (?,?,?,?,?,?,?,?,?,?,?)";
         String sql_following = "insert into follows (followee, follower) " +
@@ -58,8 +58,8 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql_View = "insert into View (bv,mid,view) values(?,?,?)";
         String sql_danmu = "insert into danmu (id, bv, mid, time, content, postTime) values(?,?,?,?,?,?)";//add postTime
         String sql_Danmu_like = "insert into Danmu_like (id, likeBy) values (?, ?)";
-        final int BATCH_SIZE = 500;
-        final int BATCH2_SIZE = 1000;
+        final int BATCH_SIZE = 100000;
+        final int BATCH2_SIZE = 100000;
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement_user = conn.prepareStatement(sql_user);
             PreparedStatement statement_following = conn.prepareStatement(sql_following);
@@ -263,7 +263,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                         statement_Danmu_like.clearBatch();
                         conn.commit();
                     }
-                    System.out.println(cnt + "_______" + cnt_like);
+                    System.out.println(cnt + "_______" +cnt_like);
 
                 }
                 statement_Danmu_like.executeBatch();
@@ -282,6 +282,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             conn.commit();
             statement_danmu.close();
             statement_Danmu_like.close();
+            System.out.println("数据插入用时：" + (System.currentTimeMillis() - start_time) / 1000.000+"【单位：秒】");
 
 
         } catch (SQLException e) {
