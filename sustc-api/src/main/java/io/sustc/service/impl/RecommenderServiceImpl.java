@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -304,7 +305,9 @@ public class RecommenderServiceImpl implements RecommenderService {
             return s_list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
             ConnectionPool.releaseConnection(con);
         }
     }
@@ -370,7 +373,7 @@ public class RecommenderServiceImpl implements RecommenderService {
                 return new ArrayList<Long>();
             }
             return s_list;
-    } catch (SQLException e) {
+    } catch (Exception e) {
             throw new RuntimeException(e);
         }finally {
             ConnectionPool.releaseConnection(con);
