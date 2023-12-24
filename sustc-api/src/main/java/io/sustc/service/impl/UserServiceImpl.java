@@ -315,34 +315,41 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         }
         return null;
     }
-    public boolean checkUser(AuthInfo auth){
-        String sql_checkMID = "select password,qq,wechat,identity\n" +
-                "from t_user\n" +
-                "where mid = ?;";
+    public boolean checkUser(AuthInfo auth) throws Exception {
+        AESCipher aesCipher = new AESCipher();
+        Logger logger = new Logger();
+        String sql_checkMID = """
+                select password,qq,wechat,identity
+                from t_user
+                where mid = ?;""";
         String password;
         String qq;
         String wechat;
         String identity;
-        try (Connection conn = ConnectionPool.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_checkMID)){
-            stmt.setLong(1,auth.getMid());
-            log.info("SQL:{}",stmt);
+        Connection conn = null;
+        try {
+            conn = ConnectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql_checkMID);
+            stmt.setLong(1, auth.getMid());
+            logger.sql(stmt.toString());
             ResultSet rs = stmt.executeQuery();//获取结果集
-            if(rs.next()){
+            if (rs.next()) {
                 password = rs.getString("password");
                 qq = rs.getString("qq");
                 wechat = rs.getString("wechat");
                 identity = rs.getString("identity");
-            }else {//找不到mid
+            } else {//找不到mid
                 return false;
             }
         } catch (SQLException e) {
             return false;
+        } finally {
+            ConnectionPool.releaseConnection(conn);
         }
-
-        if(auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
-        if(qq == null && wechat == null && password == null) return false;//三个同时无
-        return true;
+        String P = aesCipher.decrypt(password);
+        if (auth.getPassword() != null && !auth.getPassword().equals(P) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))
+            return false;//判断qq、wechat是本人
+        return qq != null || wechat != null || password != null;//三个同时无
     }
     public boolean check_birthday(String birthday){
         // 使用正则表达式匹配“XX月XX日”格式，月份和日期可以是单个或两个数字
