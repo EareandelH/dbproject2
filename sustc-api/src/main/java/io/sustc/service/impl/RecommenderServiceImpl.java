@@ -23,8 +23,6 @@ import java.util.List;
 @Service
 @Data
 public class RecommenderServiceImpl implements RecommenderService {
-    @Autowired
-    private DataSource dataSource;
     /**
      * Recommends a list of top 5 similar videos for a video.
      * The similarity is defined as the number of users (in the database) who have watched both videos.
@@ -52,8 +50,9 @@ public class RecommenderServiceImpl implements RecommenderService {
          * </ul>
          * If any of the corner case happened, {@code null} shall be returned.
          */
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "select * from videos where bv = ?";
 
@@ -90,6 +89,8 @@ public class RecommenderServiceImpl implements RecommenderService {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
     }
 
@@ -123,8 +124,9 @@ public class RecommenderServiceImpl implements RecommenderService {
          * </ul>
          * If any of the corner case happened, {@code null} shall be returned.
          */
+        Connection con = null;
         try {
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "SELECT v.bv, \n" +
                     "       CASE \n" +
@@ -203,6 +205,8 @@ public class RecommenderServiceImpl implements RecommenderService {
             return s_list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
     }
 
@@ -234,8 +238,9 @@ public class RecommenderServiceImpl implements RecommenderService {
          * </ul>
          * If any of the corner case happened, {@code null} shall be returned.
          */
+        Connection con = null;
         try {
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             if(pageNum <= 0 || pageSize <= 0){
                 return null;
             }
@@ -293,6 +298,8 @@ public class RecommenderServiceImpl implements RecommenderService {
             return s_list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
     }
 
@@ -316,8 +323,9 @@ public class RecommenderServiceImpl implements RecommenderService {
          * </ul>
          * If any of the corner case happened, {@code null} shall be returned.
          */
+        Connection con = null;
         try {
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             if(pageNum <= 0 || pageSize <= 0){
                 return null;
@@ -356,9 +364,12 @@ public class RecommenderServiceImpl implements RecommenderService {
             return s_list;
     } catch (SQLException e) {
             throw new RuntimeException(e);
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
     }
     boolean authInvaild(AuthInfo auth){
+        Connection con = null;
         String sql_checkMID = "select password,qq,wechat,identity\n" +
                 "from t_user\n" +
                 "where mid = ?;";
@@ -366,8 +377,9 @@ public class RecommenderServiceImpl implements RecommenderService {
         String qq;
         String wechat;
         String identity;
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql_checkMID)){
+        try{
+            con = ConnectionPool.getConnection();
+            PreparedStatement stmt = con.prepareStatement(sql_checkMID);
             stmt.setLong(1,auth.getMid());
             log.info("SQL:{}",stmt);
             ResultSet rs = stmt.executeQuery();//获取结果集
@@ -381,6 +393,8 @@ public class RecommenderServiceImpl implements RecommenderService {
             }
         } catch (SQLException e) {
             return false;
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
 
         if(auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人

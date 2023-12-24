@@ -12,8 +12,7 @@ plugins {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    compileOnly("com.opencsv:opencsv:5.8")
-
+    implementation("org.apache.commons:commons-lang3")
     // You may add any utility library you want to use, such as guava.
     // ORM libraries are prohibited in this project.
 }

@@ -1,30 +1,19 @@
 package io.sustc.service.impl;
 
-import io.sustc.dto.*;
-import io.sustc.service.DatabaseService;
+import io.sustc.dto.AuthInfo;
+import io.sustc.dto.RegisterUserReq;
+import io.sustc.dto.UserInfoResp;
+import io.sustc.dto.UserRecord;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import io.sustc.dto.PostVideoReq;
-
-import io.sustc.dto.DanmuRecord;
-import io.sustc.dto.UserRecord;
-import io.sustc.dto.VideoRecord;
-import io.sustc.service.DatabaseService;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.sql.DataSource;
-import java.security.SecureRandom;
-import java.sql.*;
-import java.time.LocalDateTime;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +25,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
     private DataSource dataSource;
     Logger logger =new Logger();
     public long register(RegisterUserReq req){
-        Logger.function("register "+req.toString());
+        logger.function("register "+req.toString());
         try{
             Connection con = dataSource.getConnection();
             String password = req.getPassword();
@@ -181,6 +170,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         return false;
     }
     public UserInfoResp getUserInfo(long mid){
+        logger.function("getUserInfo "+mid);
         UserRecord userRecord=selectUser_mid(mid);
         if(userRecord==null){
             System.out.println("Cannot find a user corresponding to the mid: "+mid);
@@ -207,6 +197,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             PreparedStatement statement= con.prepareStatement(sql);
             statement.setLong(1,mid);
             re=statement.executeQuery();
+            logger.sql(sql);
             if(re.next()){
                 UserRecord userRecord=new UserRecord(re.getLong("mid"),re.getString("name"),
                         re.getString("sex"),re.getString("birthday"),re.getShort("level"),

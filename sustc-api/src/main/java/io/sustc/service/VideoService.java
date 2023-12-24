@@ -34,6 +34,11 @@ public interface VideoService {
     /**
      * Deletes a video.
      * This operation can be performed by the video owner or a superuser.
+<<<<<<< HEAD
+=======
+     * The coins of this video will not be returned to their donators.
+     * Likewise, the likes, favorites, etc. of this video will be removed as well.
+>>>>>>> upstream/main
      *
      * @param auth the current user's authentication information
      * @param bv   the video's {@code bv}
@@ -113,7 +118,11 @@ public interface VideoService {
      * @param keywords the keywords to search, e.g. "sustech database final review"
      * @param pageSize the page size, if there are less than {@code pageSize} videos, return all of them
      * @param pageNum  the page number, starts from 1
+<<<<<<< HEAD
      * @return a list of video {@code bv}
+=======
+     * @return a list of video {@code bv}s
+>>>>>>> upstream/main
      * @implNote If the requested page is empty, return an empty list
      * @apiNote You may consider the following corner cases:
      * <ul>
@@ -177,16 +186,29 @@ public interface VideoService {
      * Donates one coin to the video. A user can at most donate one coin to a video.
      * The user can only coin a video if he/she can search it ({@link io.sustc.service.VideoService#searchVideo(AuthInfo, String, int, int)}).
      * It is not mandatory that the user shall watch the video first before he/she donates coin to it.
+<<<<<<< HEAD
+=======
+     * If the current user donated a coin to this video successfully, he/she's coin number shall be reduced by 1.
+     * However, the coin number of the owner of the video shall NOT increase.
+>>>>>>> upstream/main
      *
      * @param auth the current user's authentication information
      * @param bv   the video's {@code bv}
      * @return whether a coin is successfully donated
+<<<<<<< HEAD
+=======
+     * @implNote There is not way to earn coins in this project for simplicity
+>>>>>>> upstream/main
      * @apiNote You may consider the following corner cases:
      * <ul>
      *   <li>{@code auth} is invalid, as stated in {@link io.sustc.service.UserService#deleteAccount(AuthInfo, long)}</li>
      *   <li>cannot find a video corresponding to the {@code bv}</li>
      *   <li>the user cannot search this video or he/she is the owner</li>
+<<<<<<< HEAD
      *   <li>the user has no coin or has donated a coin to this video</li>
+=======
+     *   <li>the user has no coin or has donated a coin to this video (user cannot withdraw coin donation)</li>
+>>>>>>> upstream/main
      * </ul>
      * If any of the corner case happened, {@code false} shall be returned.
      */
@@ -229,5 +251,4 @@ public interface VideoService {
      * If any of the corner case happened, {@code false} shall be returned.
      */
     boolean collectVideo(AuthInfo auth, String bv);
-
 }
