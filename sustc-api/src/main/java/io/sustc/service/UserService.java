@@ -3,12 +3,9 @@ package io.sustc.service;
 import io.sustc.dto.AuthInfo;
 import io.sustc.dto.RegisterUserReq;
 import io.sustc.dto.UserInfoResp;
-<<<<<<< HEAD
 import io.sustc.dto.UserRecord;
 
 import java.util.ArrayList;
-=======
->>>>>>> upstream/main
 
 public interface UserService {
 
