@@ -1,30 +1,19 @@
 package io.sustc.service.impl;
 
-import io.sustc.dto.*;
-import io.sustc.service.DatabaseService;
+import io.sustc.dto.AuthInfo;
+import io.sustc.dto.RegisterUserReq;
+import io.sustc.dto.UserInfoResp;
+import io.sustc.dto.UserRecord;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import io.sustc.dto.PostVideoReq;
-
-import io.sustc.dto.DanmuRecord;
-import io.sustc.dto.UserRecord;
-import io.sustc.dto.VideoRecord;
-import io.sustc.service.DatabaseService;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.sql.DataSource;
-import java.security.SecureRandom;
-import java.sql.*;
-import java.time.LocalDateTime;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

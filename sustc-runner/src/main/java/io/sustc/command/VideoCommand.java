@@ -21,11 +21,7 @@ public class VideoCommand {
     @Autowired
     private VideoService videoService;
 
-<<<<<<< HEAD
-    @ShellMethod("video post")
-=======
     @ShellMethod(key = "video post")
->>>>>>> upstream/main
     public String postVideo(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -52,11 +48,7 @@ public class VideoCommand {
         return videoService.postVideo(auth, req);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video delete")
-=======
     @ShellMethod(key = "video delete")
->>>>>>> upstream/main
     public boolean deleteVideo(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -74,11 +66,7 @@ public class VideoCommand {
         return videoService.deleteVideo(auth, bv);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video update")
-=======
     @ShellMethod(key = "video update")
->>>>>>> upstream/main
     public boolean updateVideoInfo(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -106,11 +94,7 @@ public class VideoCommand {
         return videoService.updateVideoInfo(auth, bv, req);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video search")
-=======
     @ShellMethod(key = "video search")
->>>>>>> upstream/main
     public List<String> searchVideo(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -130,29 +114,17 @@ public class VideoCommand {
         return videoService.searchVideo(auth, keywords, pageSize, pageNum);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video viewrate")
-=======
     @ShellMethod(key = "video viewrate")
->>>>>>> upstream/main
     public double getAverageViewRate(String bv) {
         return videoService.getAverageViewRate(bv);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video hotspot")
-=======
     @ShellMethod(key = "video hotspot")
->>>>>>> upstream/main
     public Set<Integer> getHotspot(String bv) {
         return videoService.getHotspot(bv);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video review")
-=======
     @ShellMethod(key = "video review")
->>>>>>> upstream/main
     public boolean reviewVideo(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -170,11 +142,7 @@ public class VideoCommand {
         return videoService.reviewVideo(auth, bv);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video coin")
-=======
     @ShellMethod(key = "video coin")
->>>>>>> upstream/main
     public boolean coinVideo(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -192,11 +160,7 @@ public class VideoCommand {
         return videoService.coinVideo(auth, bv);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video like")
-=======
     @ShellMethod(key = "video like")
->>>>>>> upstream/main
     public boolean likeVideo(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -214,11 +178,7 @@ public class VideoCommand {
         return videoService.likeVideo(auth, bv);
     }
 
-<<<<<<< HEAD
-    @ShellMethod("video collect")
-=======
     @ShellMethod(key = "video collect")
->>>>>>> upstream/main
     public boolean collectVideo(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,

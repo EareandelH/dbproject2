@@ -1,85 +1,32 @@
 package io.sustc.benchmark;
 
-<<<<<<< HEAD
-import io.fury.Fury;
-import io.fury.ThreadSafeFury;
-import io.fury.config.CompatibleMode;
-import io.fury.config.Language;
-import io.sustc.dto.DanmuRecord;
-import io.sustc.dto.UserRecord;
-import io.sustc.dto.VideoRecord;
-import io.sustc.service.DatabaseService;
-=======
 import io.fury.ThreadSafeFury;
 import io.sustc.dto.*;
 import io.sustc.service.*;
->>>>>>> upstream/main
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
-import java.io.FileInputStream;
-import java.nio.file.Paths;
-import java.util.List;
-=======
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicLong;
->>>>>>> upstream/main
 
 @Service
 @Slf4j
 public class BenchmarkService {
 
     @Autowired
-<<<<<<< HEAD
-    private BenchmarkConfig benchmarkConfig;
-=======
     private BenchmarkConfig config;
->>>>>>> upstream/main
 
     @Autowired
     private DatabaseService databaseService;
 
-<<<<<<< HEAD
-    @BenchmarkStep(order = 1, timeout = 10, description = "Import data")
-    @SneakyThrows
-    public BenchmarkResult importData() {
-        val dataDir = Paths.get(benchmarkConfig.getDataPath(), BenchmarkConstants.IMPORT_DATA_PATH);
-
-        ThreadSafeFury fury = Fury.builder()
-                .requireClassRegistration(false)
-                .withLanguage(Language.JAVA)
-                .withRefTracking(true)
-                .withCompatibleMode(CompatibleMode.COMPATIBLE)
-                .withAsyncCompilation(true)
-                .buildThreadSafeFury();
-
-        FileInputStream danmuStream = new FileInputStream(
-                dataDir.resolve(BenchmarkConstants.DANMU_FILENAME).toString());
-        byte[] danmuBytes = danmuStream.readAllBytes();
-        danmuStream.close();
-        List<DanmuRecord> danmuRecords = (List<DanmuRecord>) fury.deserialize(danmuBytes);
-
-        FileInputStream userSteram = new FileInputStream(dataDir.resolve(BenchmarkConstants.USER_FILENAME).toString());
-        byte[] userBytes = userSteram.readAllBytes();
-        userSteram.close();
-        List<UserRecord> userRecords = (List<UserRecord>) fury.deserialize(userBytes);
-
-        FileInputStream videoStream = new FileInputStream(
-                dataDir.resolve(BenchmarkConstants.VIDEO_FILENAME).toString());
-        byte[] videoBytes = videoStream.readAllBytes();
-        videoStream.close();
-        List<VideoRecord> videoRecords = (List<VideoRecord>) fury.deserialize(videoBytes);
-
-        val startedTime = System.nanoTime();
-=======
     @Autowired(required = false)
     private DanmuService danmuService;
 
@@ -117,19 +64,11 @@ public class BenchmarkService {
         List<VideoRecord> videoRecords = deserialize(BenchmarkConstants.IMPORT_DATA, BenchmarkConstants.VIDEO_RECORDS);
 
         val startTime = System.currentTimeMillis();
->>>>>>> upstream/main
         try {
             databaseService.importData(danmuRecords, userRecords, videoRecords);
         } catch (Exception e) {
             log.error("Exception encountered during importing data, you may early stop this run", e);
         }
-<<<<<<< HEAD
-        val finishedTime = System.nanoTime();
-
-        return BenchmarkResult.builder()
-                .elapsedTime(finishedTime - startedTime)
-                .build();
-=======
         val endTime = System.currentTimeMillis();
 
         return new BenchmarkResult(endTime - startTime);
@@ -775,6 +714,5 @@ public class BenchmarkService {
                 && arrayAsSetEquals(expect.getLiked(), actual.getLiked())
                 && arrayAsSetEquals(expect.getCollected(), actual.getCollected())
                 && arrayAsSetEquals(expect.getPosted(), actual.getPosted());
->>>>>>> upstream/main
     }
 }

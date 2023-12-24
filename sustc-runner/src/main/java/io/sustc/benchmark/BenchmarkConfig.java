@@ -1,9 +1,5 @@
 package io.sustc.benchmark;
 
-<<<<<<< HEAD
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-=======
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.fury.Fury;
 import io.fury.ThreadSafeFury;
@@ -12,7 +8,6 @@ import io.fury.config.Language;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
->>>>>>> upstream/main
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
@@ -37,9 +32,6 @@ public class BenchmarkConfig {
      * Indicator for enabling some additional steps that only run in student mode,
      * e.g., truncate tables.
      */
-<<<<<<< HEAD
-    private Boolean studentMode = false;
-=======
     private boolean studentMode = false;
 
     @Bean
@@ -57,5 +49,4 @@ public class BenchmarkConfig {
     ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
->>>>>>> upstream/main
 }
