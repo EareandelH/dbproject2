@@ -63,7 +63,8 @@ public class AuthInfo {
     private String wechat;
 }
 */
-    public boolean checkUser(AuthInfo auth){
+    public boolean checkUser(AuthInfo auth) throws Exception {
+        AESCipher aesCipher = new AESCipher();
         Logger logger = new Logger();
         String sql_checkMID = """
                 select password,qq,wechat,identity
@@ -93,15 +94,20 @@ public class AuthInfo {
         }finally {
             ConnectionPool.releaseConnection(conn);
         }
-        if(auth.getPassword() != null && !auth.getPassword().equals(password) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
+        String P = aesCipher.decrypt(password);
+        if(auth.getPassword() != null && !auth.getPassword().equals(P) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
         return qq != null || wechat != null || password != null;//三个同时无
     }
     @Override
     public long sendDanmu(AuthInfo auth, String bv, String content, float time) {
         Logger logger = new Logger();
-        if(!checkUser(auth) || Objects.equals(content, "") || content == null) {
-            System.out.println("The auth is invalid");
-            return -1;
+        try {
+            if(!checkUser(auth) || Objects.equals(content, "") || content == null) {
+                System.out.println("The auth is invalid");
+                return -1;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         if(id_max == -1) getID();
         String sql_insertDanmu = "insert into values (?, ?, ?, ?, ?, ?)";
@@ -220,7 +226,11 @@ public class AuthInfo {
     @Override
     public boolean likeDanmu(AuthInfo auth, long id) {//danmu的id
         Logger logger = new Logger();
-        if(!checkUser(auth))return false;
+        try {
+            if(!checkUser(auth))return false;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         String sql_check = """
                 select d.id
                 from Danmu_like d

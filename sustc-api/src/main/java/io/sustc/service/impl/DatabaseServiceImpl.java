@@ -50,6 +50,12 @@ public class DatabaseServiceImpl implements DatabaseService {
     ) {
         long start_time = System.currentTimeMillis();
         Logger logger = new Logger();
+        AESCipher aesCipher = null;
+        try {
+            aesCipher = new AESCipher();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         String sql_user = "insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) " +
                 "values (?,?,?,?,?,?,?,?,?,?,?)";
         String sql_following = "insert into follows (followee, follower) " +
@@ -79,6 +85,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             int cnt_following = 0;
             for (UserRecord userRecord : userRecords) {
                 cnt++;
+                String P = aesCipher.encrypt(userRecord.getPassword());
                 statement_user.setLong(1, userRecord.getMid());
                 statement_user.setLong(2, userRecord.getCoin());
                 statement_user.setString(3, userRecord.getName());
@@ -87,7 +94,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                 statement_user.setInt(6, userRecord.getLevel());
                 statement_user.setString(7, userRecord.getSign());
                 statement_user.setString(8, String.valueOf(userRecord.getIdentity()));
-                statement_user.setString(9, userRecord.getPassword());
+                statement_user.setString(9, P);
                 statement_user.setString(10, userRecord.getQq());
                 statement_user.setString(11, userRecord.getWechat());
                 statement_user.addBatch();

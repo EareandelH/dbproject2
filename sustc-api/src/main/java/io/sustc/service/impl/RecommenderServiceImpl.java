@@ -7,7 +7,6 @@ import io.sustc.dto.VideoRecord;
 import io.sustc.service.RecommenderService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,7 @@ public class RecommenderServiceImpl implements RecommenderService {
      * </ul>
      * If any of the corner case happened, {@code null} shall be returned.
      */
-
+    UserServiceImpl userService;
     @Override
     public List<String> recommendNextVideo(String bv) {
         /**
@@ -51,7 +50,10 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
+
+        io.sustc.service.impl.Logger logger =new Logger();
         try{
+            logger.function("recommendNextVideo");
             con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "select * from videos where bv = ?";
@@ -125,7 +127,9 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
+        Logger logger =new Logger();
         try {
+            logger.function("generalRecommendations");
             con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "SELECT v.bv, \n" +
@@ -239,12 +243,14 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
+            Logger logger =new Logger();
         try {
+            logger.function("recommendVideosForUser");
             con = ConnectionPool.getConnection();
             if(pageNum <= 0 || pageSize <= 0){
                 return null;
             }
-            if(authInvaild(auth)){
+            if(userService.checkUser(auth) == false){
                 return null;
             }
             ResultSet re;
@@ -324,13 +330,15 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
+        Logger logger =new Logger();
         try {
             con = ConnectionPool.getConnection();
+            logger.function("recommendFriends");
             ResultSet re;
             if(pageNum <= 0 || pageSize <= 0){
                 return null;
             }
-            if(authInvaild(auth)){
+            if(userService.checkUser(auth) == false){
                 return null;
             }
             String sql = "SELECT u.mid, COUNT(f2.followee) AS common_followings, u.level\n" +
@@ -367,38 +375,5 @@ public class RecommenderServiceImpl implements RecommenderService {
         }finally {
             ConnectionPool.releaseConnection(con);
         }
-    }
-    boolean authInvaild(AuthInfo auth){
-        Connection con = null;
-        String sql_checkMID = "select password,qq,wechat,identity\n" +
-                "from t_user\n" +
-                "where mid = ?;";
-        String password;
-        String qq;
-        String wechat;
-        String identity;
-        try{
-            con = ConnectionPool.getConnection();
-            PreparedStatement stmt = con.prepareStatement(sql_checkMID);
-            stmt.setLong(1,auth.getMid());
-            log.info("SQL:{}",stmt);
-            ResultSet rs = stmt.executeQuery();//获取结果集
-            if(rs.next()){
-                password = rs.getString("password");
-                qq = rs.getString("qq");
-                wechat = rs.getString("wechat");
-                identity = rs.getString("identity");
-            }else {//找不到mid
-                return false;
-            }
-        } catch (SQLException e) {
-            return false;
-        }finally {
-            ConnectionPool.releaseConnection(con);
-        }
-
-        if(auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
-        if(qq == null && wechat == null && password == null) return false;//三个同时无
-        return true;
     }
 }
