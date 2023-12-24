@@ -34,7 +34,9 @@ import java.util.regex.Pattern;
 
 public class UserServiceImpl implements io.sustc.service.UserService {
     private DataSource dataSource;
+    Logger logger =new Logger();
     public long register(RegisterUserReq req){
+        Logger.function("register "+req.toString());
         try{
             Connection con = dataSource.getConnection();
             String password = req.getPassword();
