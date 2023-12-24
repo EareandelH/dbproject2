@@ -3,14 +3,12 @@ package io.sustc.service.impl;
 import io.sustc.dto.DanmuRecord;
 import io.sustc.dto.UserRecord;
 import io.sustc.dto.VideoRecord;
-import io.sustc.service.DanmuService;
 import io.sustc.service.DatabaseService;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,9 +21,9 @@ import java.util.List;
  * As long as the class is annotated and implements the corresponding interface, you can place it under any package.
  */
 @Service
-@Slf4j
 public class DatabaseServiceImpl implements DatabaseService {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(DatabaseServiceImpl.class);
     /**
      * Getting a {@link DataSource} instance from the framework, whose connections are managed by HikariCP.
      * <p>
@@ -265,7 +263,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                         statement_Danmu_like.clearBatch();
                         conn.commit();
                     }
-                    System.out.println(cnt + "_______" +cnt_like);
+                    System.out.println(cnt + "_______" + cnt_like);
 
                 }
                 statement_Danmu_like.executeBatch();
