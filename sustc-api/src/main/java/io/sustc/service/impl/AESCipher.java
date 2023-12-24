@@ -45,6 +45,7 @@ public class AESCipher {
         return null;
     }
 
+
     public String decrypt(String strToDecrypt) {
         try {
             Cipher cipher = Cipher.getInstance("AES");
