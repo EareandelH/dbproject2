@@ -23,12 +23,13 @@ public class DanmuServiceImpl implements DanmuService {
     private DataSource dataSource;
     static long id_max = -1;
     public void getID(){
+        Logger logger = new Logger();
         String sql_selectID = "select count(*) from Danmu;";
         Connection conn = null;
         try {
             conn = ConnectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql_selectID);
-            log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
+            logger.sql(sql_selectID);
             ResultSet rs = stmt.executeQuery();//执行查询操作，用于获取查询结果集
             rs.next();
             id_max = rs.getInt(1);
@@ -63,6 +64,7 @@ public class AuthInfo {
 }
 */
     public boolean checkUser(AuthInfo auth){
+        Logger logger = new Logger();
         String sql_checkMID = """
                 select password,qq,wechat,identity
                 from t_user
@@ -76,7 +78,7 @@ public class AuthInfo {
             conn = ConnectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql_checkMID);
             stmt.setLong(1,auth.getMid());
-            log.info("SQL:{}",stmt);
+            logger.sql(stmt.toString());
             ResultSet rs = stmt.executeQuery();//获取结果集
             if(rs.next()){
                 password = rs.getString("password");
@@ -96,6 +98,7 @@ public class AuthInfo {
     }
     @Override
     public long sendDanmu(AuthInfo auth, String bv, String content, float time) {
+        Logger logger = new Logger();
         if(!checkUser(auth) || Objects.equals(content, "") || content == null) {
             System.out.println("The auth is invalid");
             return -1;
@@ -115,7 +118,7 @@ public class AuthInfo {
             stmt.setBigDecimal(4, BigDecimal.valueOf(time));
             stmt.setString(5,content);
             stmt.setTimestamp(6, timestamp);//时间格式可能需要修改
-            log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
+            logger.sql(stmt.toString());
             int affectedRows = stmt.executeUpdate();//执行插入操作，返回受影响的行数
             conn.commit();
             if (affectedRows > 0) {
@@ -131,6 +134,7 @@ public class AuthInfo {
                 return -1;
             }
         } catch (SQLException e) {//找不到相应的bv
+            logger.debug(e.getMessage());
             return -1;
         }finally {
             ConnectionPool.releaseConnection(conn);
@@ -139,6 +143,7 @@ public class AuthInfo {
 
     @Override
     public List<Long> displayDanmu(String bv, float timeStart, float timeEnd, boolean filter) {
+        Logger logger = new Logger();
         if(timeStart < 0 || timeEnd < 0 || timeEnd < timeStart) {
             return null;
         }
@@ -149,7 +154,7 @@ public class AuthInfo {
             conn = ConnectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql_findDuration);
             stmt.setString(1,bv);
-            log.info("SQL:{}",stmt);
+            logger.sql(stmt.toString());
             ResultSet rs = stmt.executeQuery();//获取结果集
             if (rs.next()) { // 移动游标到第一行
                 duration = rs.getLong("duration"); // 获取时长
@@ -158,6 +163,7 @@ public class AuthInfo {
                 return null;
             }
         } catch (SQLException e) {//找不到bv，错误
+            logger.debug(e.getMessage());
             System.out.println("发生 SQL 异常: " + e.getMessage());//delete
             return null;
             //throw new RuntimeException(e);检查是否代码正确
@@ -166,6 +172,7 @@ public class AuthInfo {
         }
 
         if(timeStart > duration || timeEnd > duration) {
+            logger.debug("wrong time");
             System.out.println("wrong time");//delete
             return null;
         }
@@ -192,7 +199,7 @@ public class AuthInfo {
             stmt.setString(1,bv);
             stmt.setDouble(2,timeStart);
             stmt.setDouble(3,timeEnd);
-            log.info("SQL:{}",stmt);
+            logger.sql(stmt.toString());
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
                 long id = rs.getLong("id");
@@ -203,7 +210,8 @@ public class AuthInfo {
                 return danmuID;
             }
         }catch (SQLException e){
-            System.out.println("wrong message: " + e);//delete
+            logger.debug(e.getMessage());
+            System.out.println("wrong message: " + e.getMessage());//delete
         }finally {
             ConnectionPool.releaseConnection(conn);
         }
@@ -211,6 +219,7 @@ public class AuthInfo {
     }
     @Override
     public boolean likeDanmu(AuthInfo auth, long id) {//danmu的id
+        Logger logger = new Logger();
         if(!checkUser(auth))return false;
         String sql_check = """
                 select d.id
@@ -221,8 +230,7 @@ public class AuthInfo {
             conn = ConnectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql_check);
             stmt.setLong(2, id);
-
-            log.info("SQL: {}", stmt);//日志输出，用于打印即将执行的SQL操作
+            logger.sql(stmt.toString());
             int affectedRows = stmt.executeUpdate();//执行插入操作，返回受影响的行数
             if (affectedRows > 0) {//说明找到id
                 String sql_check_likeBy = """
@@ -233,14 +241,14 @@ public class AuthInfo {
                 try (PreparedStatement stmt_2 = conn.prepareStatement(sql_check_likeBy)){
                     stmt_2.setLong(1, id);
                     stmt_2.setLong(2,auth.getMid());
-                    log.info("SQL:{}",stmt_2);
+                    logger.sql(stmt_2.toString());
                     int affectedRows_2 = stmt_2.executeUpdate();
                     if(affectedRows_2 > 0){//已经点过赞
                         String sql_delete = "delete from Danmu_like where id = ? and likeBy = ?;";
                         try (PreparedStatement stmt_3 = conn.prepareStatement(sql_delete)){
                             stmt_3.setLong(1,id);
                             stmt_3.setLong(2,auth.getMid());
-                            log.info("SQL:{}",stmt_3);
+                            logger.sql(stmt_3.toString());
                             stmt.executeUpdate();
                             conn.commit();
                             return true;
@@ -250,7 +258,7 @@ public class AuthInfo {
                         try (PreparedStatement stmt_3 = conn.prepareStatement(sql_like)){
                             stmt_3.setLong(1,id);
                             stmt_3.setLong(2,auth.getMid());
-                            log.info("SQL:{}",stmt_3);
+                            logger.sql(stmt_3.toString());
                             stmt.executeUpdate();
                             conn.commit();
                             return true;
@@ -262,6 +270,7 @@ public class AuthInfo {
                 return false;
             }
         }catch (SQLException e){
+            logger.debug(e.getMessage());
             throw new RuntimeException(e);
         }finally {
             ConnectionPool.releaseConnection(conn);

@@ -19,7 +19,11 @@ public interface DanmuService {
      * <ul>
      *   <li>{@code auth} is invalid, as stated in {@link io.sustc.service.UserService#deleteAccount(AuthInfo, long)}</li>
 <<<<<<< HEAD
+<<<<<<< HEAD
      *   <li>{@code bv} is invalid (null or empty or not found)</li>
+=======
+     *   <li>cannot find a video corresponding to the {@code bv}</li>
+>>>>>>> upstream/main
 =======
      *   <li>cannot find a video corresponding to the {@code bv}</li>
 >>>>>>> upstream/main
@@ -44,7 +48,11 @@ public interface DanmuService {
      * @apiNote You may consider the following corner cases:
      * <ul>
 <<<<<<< HEAD
+<<<<<<< HEAD
      *   <li>{@code bv} is invalid (null or empty or not found)</li>
+=======
+     *   <li>cannot find a video corresponding to the {@code bv}</li>
+>>>>>>> upstream/main
 =======
      *   <li>cannot find a video corresponding to the {@code bv}</li>
 >>>>>>> upstream/main
@@ -70,7 +78,11 @@ public interface DanmuService {
      * <ul>
      *   <li>{@code auth} is invalid, as stated in {@link io.sustc.service.UserService#deleteAccount(AuthInfo, long)}</li>
 <<<<<<< HEAD
+<<<<<<< HEAD
      *   <li>{@code id} is invalid (<= 0 or not found)</li>
+=======
+     *   <li>cannot find a danmu corresponding to the {@code id}</li>
+>>>>>>> upstream/main
 =======
      *   <li>cannot find a danmu corresponding to the {@code id}</li>
 >>>>>>> upstream/main

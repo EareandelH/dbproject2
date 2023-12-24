@@ -3,12 +3,15 @@ package io.sustc.service.impl;
 import io.sustc.dto.DanmuRecord;
 import io.sustc.dto.UserRecord;
 import io.sustc.dto.VideoRecord;
+import io.sustc.service.DanmuService;
 import io.sustc.service.DatabaseService;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,9 +24,8 @@ import java.util.List;
  * As long as the class is annotated and implements the corresponding interface, you can place it under any package.
  */
 @Service
+@Slf4j
 public class DatabaseServiceImpl implements DatabaseService {
-
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(DatabaseServiceImpl.class);
     /**
      * Getting a {@link DataSource} instance from the framework, whose connections are managed by HikariCP.
      * <p>
@@ -36,8 +38,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public List<Integer> getGroupMembers() {
-        //throw new UnsupportedOperationException("TODO: replace this with your own student id");
-        return Arrays.asList(12211615, 12210001, 12210002);
+        //TODO: replace this with your own student IDs in your group
+        return Arrays.asList(12210000, 12210001, 12210002);
     }
 
     @Override
@@ -46,6 +48,8 @@ public class DatabaseServiceImpl implements DatabaseService {
             List<UserRecord> userRecords,
             List<VideoRecord> videoRecords
     ) {
+        long start_time = System.currentTimeMillis();
+        Logger logger = new Logger();
         String sql_user = "insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) " +
                 "values (?,?,?,?,?,?,?,?,?,?,?)";
         String sql_following = "insert into follows (followee, follower) " +
@@ -58,8 +62,8 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql_View = "insert into View (bv,mid,view) values(?,?,?)";
         String sql_danmu = "insert into danmu (id, bv, mid, time, content, postTime) values(?,?,?,?,?,?)";//add postTime
         String sql_Danmu_like = "insert into Danmu_like (id, likeBy) values (?, ?)";
-        final int BATCH_SIZE = 500;
-        final int BATCH2_SIZE = 1000;
+        final int BATCH_SIZE = 100000;
+        final int BATCH2_SIZE = 100000;
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement statement_user = conn.prepareStatement(sql_user);
             PreparedStatement statement_following = conn.prepareStatement(sql_following);
@@ -263,7 +267,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                         statement_Danmu_like.clearBatch();
                         conn.commit();
                     }
-                    System.out.println(cnt + "_______" + cnt_like);
+                    System.out.println(cnt + "_______" +cnt_like);
 
                 }
                 statement_Danmu_like.executeBatch();
@@ -282,11 +286,17 @@ public class DatabaseServiceImpl implements DatabaseService {
             conn.commit();
             statement_danmu.close();
             statement_Danmu_like.close();
+            System.out.println("数据插入用时：" + (System.currentTimeMillis() - start_time) / 1000.000+"【单位：秒】");
 
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);//检测sql正确
+            logger.debug(e.getMessage());
+            throw new RuntimeException(e.getMessage());//检测sql正确
         }
+        // TODO: implement your import logic
+        System.out.println(danmuRecords.size());
+        System.out.println(userRecords.size());
+        System.out.println(videoRecords.size());
     }
 
     /*
@@ -299,7 +309,6 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public void truncate() {
         // You can use the default truncate script provided by us in most cases,
-        // but if it doesn't work properly, you may need to modify it.
         String sql = "DO $$\n" +
                 "DECLARE\n" +
                 "    tables CURSOR FOR\n" +
@@ -322,18 +331,19 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public Integer sum(int a, int b) {
+        Logger logger = new Logger();
         String sql = "SELECT ?+?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, a);
             stmt.setInt(2, b);
-            log.info("SQL: {}", stmt);
-
+            logger.sql(stmt.toString());
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getInt(1);
         } catch (SQLException e) {
+            logger.debug(e.getMessage());
             throw new RuntimeException(e);
         }
     }
