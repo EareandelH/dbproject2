@@ -18,7 +18,11 @@ public class UserCommand {
     @Autowired
     private UserService userService;
 
+<<<<<<< HEAD
     @ShellMethod("user register")
+=======
+    @ShellMethod(key = "user register")
+>>>>>>> upstream/main
     public long register(
             String password,
             @ShellOption(defaultValue = ShellOption.NULL) String qq,
@@ -41,7 +45,11 @@ public class UserCommand {
         return userService.register(req);
     }
 
+<<<<<<< HEAD
     @ShellMethod("user delete")
+=======
+    @ShellMethod(key = "user delete")
+>>>>>>> upstream/main
     public void deleteAccount(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -59,7 +67,11 @@ public class UserCommand {
         userService.deleteAccount(auth, toDeleteMid);
     }
 
+<<<<<<< HEAD
     @ShellMethod("user follow")
+=======
+    @ShellMethod(key = "user follow")
+>>>>>>> upstream/main
     public boolean follow(
             @ShellOption(defaultValue = ShellOption.NULL) Long mid,
             @ShellOption(defaultValue = ShellOption.NULL) String pwd,
@@ -77,7 +89,11 @@ public class UserCommand {
         return userService.follow(auth, followeeMid);
     }
 
+<<<<<<< HEAD
     @ShellMethod("user info")
+=======
+    @ShellMethod(key = "user info")
+>>>>>>> upstream/main
     public UserInfoResp getUserInfo(Long mid) {
         return userService.getUserInfo(mid);
     }

@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,8 +39,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public List<Integer> getGroupMembers() {
-        //throw new UnsupportedOperationException("TODO: replace this with your own student id");
-        return Arrays.asList(12211615, 12210001, 12210002);
+        //TODO: replace this with your own student IDs in your group
+        return Arrays.asList(12210000, 12210001, 12210002);
     }
 
     @Override
@@ -288,6 +292,10 @@ public class DatabaseServiceImpl implements DatabaseService {
         } catch (SQLException e) {
             throw new RuntimeException(e);//检测sql正确
         }
+        // TODO: implement your import logic
+        System.out.println(danmuRecords.size());
+        System.out.println(userRecords.size());
+        System.out.println(videoRecords.size());
     }
 
     /*
@@ -300,7 +308,6 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public void truncate() {
         // You can use the default truncate script provided by us in most cases,
-        // but if it doesn't work properly, you may need to modify it.
         String sql = "DO $$\n" +
                 "DECLARE\n" +
                 "    tables CURSOR FOR\n" +

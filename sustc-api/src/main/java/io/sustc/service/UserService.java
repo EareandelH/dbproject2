@@ -3,9 +3,12 @@ package io.sustc.service;
 import io.sustc.dto.AuthInfo;
 import io.sustc.dto.RegisterUserReq;
 import io.sustc.dto.UserInfoResp;
+<<<<<<< HEAD
 import io.sustc.dto.UserRecord;
 
 import java.util.ArrayList;
+=======
+>>>>>>> upstream/main
 
 public interface UserService {
 
@@ -20,7 +23,11 @@ public interface UserService {
      * <ul>
      *   <li>{@code password} or {@code name} or {@code sex} in {@code req} is null or empty</li>
      *   <li>{@code birthday} in {@code req} is valid (not null nor empty) while it's not a birthday (X月X日)</li>
+<<<<<<< HEAD
      *   <li>there is another user with same {@code name} or {@code qq} or {@code wechat} in {@code req}</li>
+=======
+     *   <li>there is another user with same {@code qq} or {@code wechat} in {@code req}</li>
+>>>>>>> upstream/main
      * </ul>
      * If any of the corner case happened, {@code -1} shall be returned.
      */
@@ -28,6 +35,11 @@ public interface UserService {
 
     /**
      * Deletes a user.
+<<<<<<< HEAD
+=======
+     * The following relationships (this user following other users and other users following this user) shall be removed.
+     * Likewise, this user's watch records, coin records, etc. shall be removed as well.
+>>>>>>> upstream/main
      *
      * @param auth indicates the current user
      * @param mid  the user to be deleted
@@ -76,5 +88,4 @@ public interface UserService {
      * If any of the corner case happened, {@code null} shall be returned.
      */
     UserInfoResp getUserInfo(long mid);
-
 }

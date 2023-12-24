@@ -5,6 +5,11 @@ spring:
     password: Jianuo123?  # change this to your own password
     hikari:
       auto-commit: false
+logging:
+  level:
+    root: off
+    io.sustc: debug
+
 ---
 
 benchmark:

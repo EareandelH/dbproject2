@@ -12,7 +12,11 @@ import lombok.Data;
 public class UserRecord implements Serializable {
 
     /**
+<<<<<<< HEAD
      * The user's ID
+=======
+     * The user's unique ID
+>>>>>>> upstream/main
      */
     private long mid;
 
@@ -27,7 +31,11 @@ public class UserRecord implements Serializable {
     private String sex;
 
     /**
+<<<<<<< HEAD
      * The user's birthday
+=======
+     * The user's birthday, can be empty
+>>>>>>> upstream/main
      */
     private String birthday;
 
@@ -57,12 +65,20 @@ public class UserRecord implements Serializable {
     private String password;
 
     /**
+<<<<<<< HEAD
      * The user's qq, may be null or empty
+=======
+     * The user's unique qq, may be null or empty (not unique when null or empty)
+>>>>>>> upstream/main
      */
     private String qq;
 
     /**
+<<<<<<< HEAD
      * The user's wechat, may be null or empty
+=======
+     * The user's unique wechat, may be null or empty (not unique when null or empty)
+>>>>>>> upstream/main
      */
     private String wechat;
 
