@@ -34,7 +34,7 @@ public class Logger {
     }
     public void debug(String info){
         try {
-            bw = new BufferedWriter(new FileWriter(file));
+            bw = new BufferedWriter(new FileWriter(file,true));
             bw.write("[DEBUG] "+info+" [Time]"+new Date());
             bw.newLine();
             bw.flush();
@@ -45,7 +45,7 @@ public class Logger {
     }
     public void sql(String info){
         try {
-            bw = new BufferedWriter(new FileWriter(file));
+            bw = new BufferedWriter(new FileWriter(file,true));
             bw.write("[SQL] "+info+" [Time]"+new Date());
             bw.newLine();
             bw.flush();
