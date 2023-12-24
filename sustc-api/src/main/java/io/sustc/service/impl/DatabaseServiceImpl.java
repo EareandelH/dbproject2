@@ -275,7 +275,6 @@ public class DatabaseServiceImpl implements DatabaseService {
                         conn.commit();
                     }
                     System.out.println(cnt + "_______" +cnt_like);
-
                 }
                 statement_Danmu_like.executeBatch();
                 statement_Danmu_like.clearBatch();
@@ -294,8 +293,6 @@ public class DatabaseServiceImpl implements DatabaseService {
             statement_danmu.close();
             statement_Danmu_like.close();
             System.out.println("数据插入用时：" + (System.currentTimeMillis() - start_time) / 1000.000+"【单位：秒】");
-
-
         } catch (SQLException e) {
             logger.debug(e.getMessage());
             throw new RuntimeException(e.getMessage());//检测sql正确
