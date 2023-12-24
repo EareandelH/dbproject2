@@ -17,6 +17,7 @@ import java.util.*;
 public class VideoServiceImpl implements io.sustc.service.VideoService {
     @Autowired
     private DataSource dataSource;
+    Logger logger =new Logger();
     public String postVideo(AuthInfo auth, PostVideoReq req){
 
         try{
@@ -244,6 +245,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
     }
 
     public double getAverageViewRate(String bv){
+        logger.function("getAverageViewRate "+bv);
         try{
             VideoRecord videoRecord=select_BV(bv);
             if(videoRecord==null){
@@ -268,6 +270,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
     }
 
     public Set<Integer> getHotspot(String bv){
+        logger.function("getHotspot");
         Set<Integer> hotspotChunks = new HashSet<>();
         try {
             Connection con =dataSource.getConnection();
