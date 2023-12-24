@@ -170,6 +170,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         return false;
     }
     public UserInfoResp getUserInfo(long mid){
+        logger.function("getUserInfo "+mid);
         UserRecord userRecord=selectUser_mid(mid);
         if(userRecord==null){
             System.out.println("Cannot find a user corresponding to the mid: "+mid);
@@ -196,6 +197,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             PreparedStatement statement= con.prepareStatement(sql);
             statement.setLong(1,mid);
             re=statement.executeQuery();
+            logger.sql(sql);
             if(re.next()){
                 UserRecord userRecord=new UserRecord(re.getLong("mid"),re.getString("name"),
                         re.getString("sex"),re.getString("birthday"),re.getShort("level"),
