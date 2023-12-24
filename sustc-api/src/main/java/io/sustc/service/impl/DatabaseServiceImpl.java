@@ -70,7 +70,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql_Danmu_like = "insert into Danmu_like (id, likeBy) values (?, ?)";
         final int BATCH_SIZE = 100000;
         final int BATCH2_SIZE = 100000;
-        try (Connection conn = dataSource.getConnection()) {
+        Connection conn = null;
+        try  {
+            conn = ConnectionPool.getConnection();
             PreparedStatement statement_user = conn.prepareStatement(sql_user);
             PreparedStatement statement_following = conn.prepareStatement(sql_following);
             PreparedStatement statement_video = conn.prepareStatement(sql_video);
@@ -262,6 +264,21 @@ public class DatabaseServiceImpl implements DatabaseService {
                 statement_danmu.setTimestamp(6, danmuRecord.getPostTime());
                 statement_danmu.addBatch();
 
+                if (cnt % BATCH2_SIZE == 0) {
+                    statement_danmu.executeBatch();
+                    statement_danmu.clearBatch();
+                    conn.commit();
+                }
+                System.out.println(cnt);
+            }
+            statement_danmu.executeBatch();
+            statement_danmu.clearBatch();
+            conn.commit();
+            statement_danmu.close();
+
+            cnt = 0;
+            for (DanmuRecord danmuRecord:danmuRecords) {
+                cnt++;
                 int like = 0;
                 for (int i = 0; i < danmuRecord.getLikedBy().length; i++) {
                     statement_Danmu_like.setLong(1, cnt);
@@ -276,26 +293,17 @@ public class DatabaseServiceImpl implements DatabaseService {
                     }
                     System.out.println(cnt + "_______" +cnt_like);
                 }
-                statement_Danmu_like.executeBatch();
-                statement_Danmu_like.clearBatch();
-                conn.commit();
-
-                if (cnt % BATCH2_SIZE == 0) {
-                    statement_danmu.executeBatch();
-                    statement_danmu.clearBatch();
-                    conn.commit();
-                }
-                System.out.println(cnt);
             }
-            statement_danmu.executeBatch();
-            statement_danmu.clearBatch();
+            statement_Danmu_like.executeBatch();
+            statement_Danmu_like.clearBatch();
             conn.commit();
-            statement_danmu.close();
             statement_Danmu_like.close();
             System.out.println("数据插入用时：" + (System.currentTimeMillis() - start_time) / 1000.000+"【单位：秒】");
         } catch (SQLException e) {
             logger.debug(e.getMessage());
             throw new RuntimeException(e.getMessage());//检测sql正确
+        }finally {
+            ConnectionPool.releaseConnection(conn);
         }
         // TODO: implement your import logic
         System.out.println(danmuRecords.size());
