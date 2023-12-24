@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -117,7 +118,9 @@ public class AuthInfo {
             PreparedStatement stmt = conn.prepareStatement(sql_insertDanmu);
             id_max++;
             LocalDateTime currentDateTime = LocalDateTime.now(); // 获取当前日期时间
-            Timestamp timestamp = Timestamp.valueOf(currentDateTime);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS");
+            String formattedDateTime = currentDateTime.format(formatter);
+            Timestamp timestamp = Timestamp.valueOf(formattedDateTime);
             stmt.setLong(1,id_max);
             stmt.setString(2, bv);
             stmt.setLong(3, auth.getMid());
