@@ -19,9 +19,9 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
     private DataSource dataSource;
     Logger logger =new Logger();
     public String postVideo(AuthInfo auth, PostVideoReq req){
-
+        Connection con=null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "insert into videos (bv,title,mid,name,commit_time," +
                     "review_time,public_time,duration,description,reviewer) " +
@@ -79,12 +79,15 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public boolean deleteVideo(AuthInfo auth, String bv){
+        Connection con = null;
         try {
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql="delete from videos where bv=? and mid=?";
             PreparedStatement statement=con.prepareStatement(sql);
@@ -114,12 +117,15 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
     public boolean updateVideoInfo(AuthInfo auth, String bv, PostVideoReq req){
+        Connection con=null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             UserServiceImpl userService=new UserServiceImpl();
             long mid=auth.getMid();
@@ -176,12 +182,15 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
 
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
     public List<String> searchVideo(AuthInfo auth, String keywords, int pageSize, int pageNum){
+        Connection con = null;
         try {
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             UserServiceImpl userService=new UserServiceImpl();
             List<String> videos=new ArrayList<>();
             Map<String, Integer> relevanceMap = new HashMap<>();
@@ -239,6 +248,8 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             return videos;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
 
         return null;
@@ -272,8 +283,9 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
     public Set<Integer> getHotspot(String bv){
         logger.function("getHotspot");
         Set<Integer> hotspotChunks = new HashSet<>();
+        Connection con=null;
         try {
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             String sql="select floor(time / 10) as chunk, count(*) as danmu_count\n" +
                     "from Danmu\n" +
                     "where bv = ?  " +
@@ -297,13 +309,16 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             return hotspotChunks;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return hotspotChunks;
     }
 
     public boolean reviewVideo(AuthInfo auth, String bv){
+        Connection con = null ;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             ResultSet re;
             long mid= auth.getMid();
             UserServiceImpl userService=new UserServiceImpl();
@@ -342,14 +357,17 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
 
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
 
 
     public boolean coinVideo(AuthInfo auth, String bv){
+        Connection con=null;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             long mid =auth.getMid();
             UserServiceImpl userService=new UserServiceImpl();
             if(!userService.checkUser(auth)){
@@ -390,14 +408,17 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
 
 
     public boolean likeVideo(AuthInfo auth, String bv){
+        Connection con = null;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             long mid =auth.getMid();
             UserServiceImpl userService=new UserServiceImpl();
             if(!userService.checkUser(auth)){
@@ -439,14 +460,17 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
 
 
     public boolean collectVideo(AuthInfo auth, String bv){
+        Connection con =null;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             long mid =auth.getMid();
             UserServiceImpl userService=new UserServiceImpl();
             if(!userService.checkUser(auth)){
@@ -484,14 +508,17 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
 
     //--------------------------------------------------------------------------------------
     public boolean cancel_like(long mid,String bv){
+        Connection con = null;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             ResultSet re;
             String sql_like_cancel="delete from liker where bv=? and mid=?";
             PreparedStatement preparedStatement_like_cancel=con.prepareStatement(sql_like_cancel);
@@ -503,12 +530,15 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             else System.out.println("Cancel failed!");
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
     public boolean cancel_collect(long mid,String bv){
+        Connection con = null;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             ResultSet re;
             String sql="delete from favorite where bv=? and mid=?";
             PreparedStatement statement=con.prepareStatement(sql);
@@ -520,12 +550,15 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             else System.out.println("Cancel failed!");
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
     public VideoRecord selcetVideo_Title_Mid(String title,long mid){
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "select * from videos where title=? and mid=?";
             PreparedStatement statement= con.prepareStatement(sql);
@@ -543,12 +576,15 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             else return null;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public VideoRecord select_BV(String bv){
+        Connection con = null;
         try{
-            Connection con=dataSource.getConnection();
+            con=ConnectionPool.getConnection();
             ResultSet re=null;
             String sql_select_BV = "select * from videos where bv=?";
             PreparedStatement statement= con.prepareStatement(sql_select_BV);
@@ -565,12 +601,15 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             else return null;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public ArrayList<Long> video_view(String bv){
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<Long> view_Array=new ArrayList<>();
             String sql="select view from View where bv=?";
@@ -584,6 +623,8 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             return view_Array;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
@@ -601,7 +642,6 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
     }
     private String BVbuilder(){
         try {
-            ResultSet re;
             String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             StringBuilder randomString = new StringBuilder(10);
             SecureRandom random = new SecureRandom();

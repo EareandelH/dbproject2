@@ -26,8 +26,9 @@ public class UserServiceImpl implements io.sustc.service.UserService {
     Logger logger =new Logger();
     public long register(RegisterUserReq req){
         logger.function("register "+req.toString());
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             String password = req.getPassword();
             if(password==null||password.equals("")){
                 System.out.println("Your password cannot be empty.");
@@ -90,12 +91,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return -1;
     }
     public boolean deleteAccount(AuthInfo auth, long mid){
+        Connection con = null ;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             UserRecord userRecord_mid = selectUser_mid(mid);
             if(userRecord_mid==null){
                 System.out.println("Cannot find a user corresponding to the mid: "+mid);
@@ -124,12 +128,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
     public boolean follow(AuthInfo auth, long followeeMid){
+        Connection con = null;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             long followerMid =auth.getMid();
 
             if(!checkUser(auth)){
@@ -166,6 +173,8 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             }
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
@@ -190,8 +199,9 @@ public class UserServiceImpl implements io.sustc.service.UserService {
 
     //----------------------------------------------------------------------------------------
     public  UserRecord selectUser_mid(long mid){
+        Connection con =null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "select * from t_user where mid=?";
             PreparedStatement statement= con.prepareStatement(sql);
@@ -208,12 +218,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             else return null;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public  UserRecord selectUser_name(String name){
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "select * from t_user where name=?";
             PreparedStatement statement= con.prepareStatement(sql);
@@ -229,12 +242,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             else return null;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public boolean cancel_follow(long followeeMid,long followerMid){
+        Connection con = null;
         try{
-            Connection con =dataSource.getConnection();
+            con =ConnectionPool.getConnection();
             ResultSet re;
             String sql="delete from follows where followee=? and follower=?";
             PreparedStatement statement=con.prepareStatement(sql);
@@ -246,12 +262,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             else System.out.println("Cancel failed!");
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return false;
     }
     public  UserRecord selectUser_qq(String qq){
+        Connection con =null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "select * from t_user where qq=?";
             PreparedStatement statement= con.prepareStatement(sql);
@@ -267,12 +286,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             else return null;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public  UserRecord selectUser_wechat(String wechat){
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "select * from t_user where mid=?";
             PreparedStatement statement= con.prepareStatement(sql);
@@ -288,6 +310,8 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             else return null;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
@@ -306,24 +330,25 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         try {
             conn = ConnectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql_checkMID);
-            stmt.setLong(1,auth.getMid());
+            stmt.setLong(1, auth.getMid());
             logger.sql(stmt.toString());
             ResultSet rs = stmt.executeQuery();//获取结果集
-            if(rs.next()){
+            if (rs.next()) {
                 password = rs.getString("password");
                 qq = rs.getString("qq");
                 wechat = rs.getString("wechat");
                 identity = rs.getString("identity");
-            }else {//找不到mid
+            } else {//找不到mid
                 return false;
             }
         } catch (SQLException e) {
             return false;
-        }finally {
+        } finally {
             ConnectionPool.releaseConnection(conn);
         }
         String P = aesCipher.decrypt(password);
-        if(auth.getPassword() != null && !auth.getPassword().equals(P) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))return false;//判断qq、wechat是本人
+        if (auth.getPassword() != null && !auth.getPassword().equals(P) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))
+            return false;//判断qq、wechat是本人
         return qq != null || wechat != null || password != null;//三个同时无
     }
     public boolean check_birthday(String birthday){
@@ -354,8 +379,9 @@ public class UserServiceImpl implements io.sustc.service.UserService {
 
     }
     public ArrayList<String> user_coined(long mid){
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<String> coins_Array=new ArrayList<>();
             String sql="select bv from coin where mid=?";
@@ -369,12 +395,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             return coins_Array;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public ArrayList<String> user_liked(long mid){
+        Connection con =null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<String> liked_Array=new ArrayList<>();
             String sql="select bv from liker where mid=?";
@@ -388,12 +417,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             return liked_Array;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public ArrayList<String> user_collected(long mid){
+        Connection con =null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<String> collected_Array=new ArrayList<>();
             String sql="select bv from favorite where mid=?";
@@ -407,12 +439,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             return collected_Array;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public ArrayList<Long> user_following(long mid){
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<Long> following_Array=new ArrayList<>();
             String sql="select follower from follows where followee=?";
@@ -426,12 +461,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             return following_Array;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public ArrayList<Long> user_follower(long mid){
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<Long> follower_Array=new ArrayList<>();
             String sql="select followee from follows where follower=?";
@@ -445,12 +483,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             return follower_Array;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public ArrayList<String> user_watched(long mid){
+        Connection con = null;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<String> watched_Array=new ArrayList<>();
             String sql="select bv from views where mid=?";
@@ -464,12 +505,15 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             return watched_Array;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
     public ArrayList<String> user_posted(long mid){
+        Connection con = null ;
         try{
-            Connection con = dataSource.getConnection();
+            con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<String> posted_Array=new ArrayList<>();
             String sql="select bv from videos where mid=?";
@@ -483,6 +527,8 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             return posted_Array;
         }catch (Exception e){
             e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
         }
         return null;
     }
