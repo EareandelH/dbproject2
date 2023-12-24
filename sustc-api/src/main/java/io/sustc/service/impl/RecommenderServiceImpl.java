@@ -7,7 +7,6 @@ import io.sustc.dto.VideoRecord;
 import io.sustc.service.RecommenderService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +50,8 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
+
+        io.sustc.service.impl.Logger logger =new Logger();
         try{
             con = ConnectionPool.getConnection();
             ResultSet re;
@@ -125,6 +126,7 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
+        Logger logger =new Logger();
         try {
             con = ConnectionPool.getConnection();
             ResultSet re;
@@ -239,6 +241,7 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
+            Logger logger =new Logger();
         try {
             con = ConnectionPool.getConnection();
             if(pageNum <= 0 || pageSize <= 0){
@@ -324,6 +327,7 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
+        Logger logger =new Logger();
         try {
             con = ConnectionPool.getConnection();
             ResultSet re;
