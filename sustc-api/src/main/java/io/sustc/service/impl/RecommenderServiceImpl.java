@@ -35,6 +35,7 @@ public class RecommenderServiceImpl implements RecommenderService {
      * </ul>
      * If any of the corner case happened, {@code null} shall be returned.
      */
+
     UserServiceImpl userService;
     @Override
     public List<String> recommendNextVideo(String bv) {
