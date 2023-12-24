@@ -169,11 +169,13 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             }
 //            String sql="update video set title = \'"+new_title+"\' , description = \'"+
 //                    new_description+"\' +where bv =\'"+bv+"\'";
-            String sql ="update video set title =? ,description=?,where bv =?";
+            String sql ="update video set title =? ,description=?,review_time=?,reviewer=?,where bv =?";
             PreparedStatement statement=con.prepareStatement(sql);
             statement.setString(1,new_title);
             statement.setString(2,new_description);
             statement.setString(3,bv);
+            statement.setTimestamp(4,null);
+            statement.setLong(5,-1);
             int affected = statement.executeUpdate();
             if(affected>0){
                 System.out.println("Update "+bv+" successfully!");
