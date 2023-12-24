@@ -26,7 +26,6 @@ import java.util.List;
 @Service
 @Slf4j
 public class DatabaseServiceImpl implements DatabaseService {
-
     /**
      * Getting a {@link DataSource} instance from the framework, whose connections are managed by HikariCP.
      * <p>
@@ -50,6 +49,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             List<VideoRecord> videoRecords
     ) {
         long start_time = System.currentTimeMillis();
+        Logger logger = new Logger();
         String sql_user = "insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) " +
                 "values (?,?,?,?,?,?,?,?,?,?,?)";
         String sql_following = "insert into follows (followee, follower) " +
@@ -290,7 +290,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);//检测sql正确
+            logger.debug(e.getMessage());
+            throw new RuntimeException(e.getMessage());//检测sql正确
         }
         // TODO: implement your import logic
         System.out.println(danmuRecords.size());
@@ -330,18 +331,19 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public Integer sum(int a, int b) {
+        Logger logger = new Logger();
         String sql = "SELECT ?+?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, a);
             stmt.setInt(2, b);
-            log.info("SQL: {}", stmt);
-
+            logger.sql(stmt.toString());
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getInt(1);
         } catch (SQLException e) {
+            logger.debug(e.getMessage());
             throw new RuntimeException(e);
         }
     }
