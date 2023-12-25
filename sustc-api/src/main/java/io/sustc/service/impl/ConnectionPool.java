@@ -11,9 +11,9 @@ public class ConnectionPool {
 
     static {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/database");
-        config.setUsername("username");
-        config.setPassword("password");
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres?characterEncoding=UTF-8");
+        config.setUsername("test");
+        config.setPassword("Jianuo123?");
         // 设置连接池其他属性，如最大连接数、最小连接数等
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(5);
