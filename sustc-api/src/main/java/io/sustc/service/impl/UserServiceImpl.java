@@ -318,39 +318,58 @@ public class UserServiceImpl implements io.sustc.service.UserService {
     public boolean checkUser(AuthInfo auth) throws Exception {
         AESCipher aesCipher = new AESCipher();
         Logger logger = new Logger();
-        String sql_checkMID = """
-                select password,qq,wechat,identity
-                from t_user
-                where mid = ?;""";
+        String sql_checkMid = "select * from t_user where mid = ?;";
+        String sql_checkWechat = "select * from t_user where wechat = ?;";
+        String sql_checkQq = "select * from t_user where qq = ?;";
+
         String password;
-        String qq;
-        String wechat;
-        String identity;
+
+        boolean result1;
+        boolean result2;
+        boolean result3;
         Connection conn = null;
         try {
             conn = ConnectionPool.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql_checkMID);
-            stmt.setLong(1, auth.getMid());
-            logger.sql(stmt.toString());
-            ResultSet rs = stmt.executeQuery();//获取结果集
-            if (rs.next()) {
-                password = rs.getString("password");
-                qq = rs.getString("qq");
-                wechat = rs.getString("wechat");
-                identity = rs.getString("identity");
-            } else {//找不到mid
-                return false;
+            PreparedStatement statement_1 = conn.prepareStatement(sql_checkMid);
+            statement_1.setLong(1, auth.getMid());
+            ResultSet rs_1 = statement_1.executeQuery();
+            logger.sql(statement_1.toString());
+            if (rs_1.next()) {
+                password = rs_1.getString("password");
+                String P = aesCipher.decrypt(password);
+                result1 = P.equals(auth.getPassword());
+            } else {
+                result1 = false;
             }
         } catch (SQLException e) {
+            ConnectionPool.releaseConnection(conn);
+            return false;
+        }
+        try {
+            PreparedStatement statement_2 = conn.prepareStatement(sql_checkWechat);
+            statement_2.setString(1, auth.getWechat());
+            ResultSet rs_2 = statement_2.executeQuery();
+            result2 = rs_2.next();
+            logger.sql(statement_2.toString());
+        } catch (SQLException e) {
+            ConnectionPool.releaseConnection(conn);
+            return false;
+        }
+        try {
+            PreparedStatement statement_3 = conn.prepareStatement(sql_checkQq);
+            statement_3.setString(1, auth.getQq());
+            ResultSet rs_3 = statement_3.executeQuery();
+            result3 = rs_3.next();
+            logger.sql(statement_3.toString());
+        } catch (SQLException e) {
+            ConnectionPool.releaseConnection(conn);
             return false;
         } finally {
             ConnectionPool.releaseConnection(conn);
         }
-        String P = aesCipher.decrypt(password);
-        if (auth.getPassword() != null && !auth.getPassword().equals(P) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))
-            return false;//判断qq、wechat是本人
-        return qq != null || wechat != null || password != null;//三个同时无
+        return result1 || result2 || result3;
     }
+
     public boolean check_birthday(String birthday){
         // 使用正则表达式匹配“XX月XX日”格式，月份和日期可以是单个或两个数字
         String regex = "^(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日$";
