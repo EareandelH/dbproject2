@@ -11,11 +11,11 @@ public class ConnectionPool {
 
     static {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres?characterEncoding=UTF-8");
-        config.setUsername("test");
-        config.setPassword("Jianuo123?");
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/projectT");
+        config.setUsername("postgres");
+        config.setPassword("zolian101");
         // 设置连接池其他属性，如最大连接数、最小连接数等
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(20);
         config.setMinimumIdle(5);
         dataSource = new HikariDataSource(config);
     }
