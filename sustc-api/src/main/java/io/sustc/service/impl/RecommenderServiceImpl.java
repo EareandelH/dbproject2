@@ -266,6 +266,7 @@ public class RecommenderServiceImpl implements RecommenderService {
                 return generalRecommendations(pageSize, pageNum);
             }
 
+
             String _sql = "SELECT v.bv, v.title, COUNT(distinct f1.follower) AS friend_count, v.mid, u.level, v.public_time\n" +
                     "FROM follows f1\n" +
                     "JOIN follows f2 ON f1.follower = f2.followee AND f1.followee = f2.follower\n" +
