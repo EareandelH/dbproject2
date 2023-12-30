@@ -18,6 +18,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * It's important to mark your implementation class with {@link Service} annotation.
@@ -25,7 +28,61 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class DatabaseServiceImpl implements DatabaseService {
+public class DatabaseServiceImpl implements DatabaseService{
+
+    /*public class ImportDataThread extends Thread {
+        private List<UserRecord> userRecords;
+        private String sql_user;
+        private CountDownLatch latch;
+
+        public ImportDataThread(List<UserRecord> userRecords, String sql_user, CountDownLatch latch) {
+            this.userRecords = userRecords;
+            this.sql_user = sql_user;
+            this.latch = latch;
+        }
+
+        @Override
+        public void run() {
+            Connection conn = null;
+            PreparedStatement statement_user = null;
+            try {
+                conn = ConnectionPool.getConnection();
+                statement_user = conn.prepareStatement(sql_user);
+                conn.setAutoCommit(false);
+                int cnt = 0;
+                for (UserRecord userRecord : userRecords) {
+                    cnt++;
+                    // ... prepare statement_user with userRecord data (similar to your existing logic)
+
+                    statement_user.addBatch();
+                    if (cnt % BATCH_SIZE == 0) {
+                        statement_user.executeBatch();
+                        statement_user.clearBatch();
+                        conn.commit();
+                    }
+                }
+                statement_user.executeBatch();
+                statement_user.clearBatch();
+                conn.commit();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                // Close resources and release connection
+                // Handle exceptions appropriately
+                try {
+                    if (statement_user != null) {
+                        statement_user.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                ConnectionPool.releaseConnection(conn);
+                latch.countDown();
+            }
+        }
+    }*/
+
+
     /**
      * Getting a {@link DataSource} instance from the framework, whose connections are managed by HikariCP.
      * <p>
@@ -41,21 +98,12 @@ public class DatabaseServiceImpl implements DatabaseService {
         //TODO: replace this with your own student IDs in your group
         return Arrays.asList(12210000, 12210001, 12210002);
     }
-
     @Override
     public void importData(
             List<DanmuRecord> danmuRecords,
             List<UserRecord> userRecords,
             List<VideoRecord> videoRecords
     ) {
-        long start_time = System.currentTimeMillis();
-        Logger logger = new Logger();
-        AESCipher aesCipher = null;
-        try {
-            aesCipher = new AESCipher();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         String sql_user = "insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) " +
                 "values (?,?,?,?,?,?,?,?,?,?,?)";
         String sql_following = "insert into follows (followee, follower) " +
@@ -66,11 +114,20 @@ public class DatabaseServiceImpl implements DatabaseService {
         String sql_coin = "insert into coin (bv,mid) values(?,?)";
         String sql_favorite = "insert into favorite (bv,mid) values(?,?)";
         String sql_View = "insert into View (bv,mid,view) values(?,?,?)";
-        String sql_danmu = "insert into danmu (id, bv, mid, time, content, postTime) values(?,?,?,?,?,?)";//add postTime
+        String sql_danmu = "insert into danmu (bv, mid, time, content, postTime) values(?,?,?,?,?)";//add postTime
         String sql_Danmu_like = "insert into Danmu_like (id, likeBy) values (?, ?)";
-        final int BATCH_SIZE = 100000;
-        final int BATCH2_SIZE = 100000;
+        final int BATCH_SIZE = 1000000;
+        final int BATCH2_SIZE = 1000000;
         Connection conn = null;
+        long start_time = System.currentTimeMillis();
+        Logger logger = new Logger();
+        AESCipher aesCipher = null;
+        try {
+            aesCipher = new AESCipher();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         try  {
             conn = ConnectionPool.getConnection();
             PreparedStatement statement_user = conn.prepareStatement(sql_user);
@@ -80,7 +137,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             PreparedStatement statement_coin = conn.prepareStatement(sql_coin);
             PreparedStatement statement_favorite = conn.prepareStatement(sql_favorite);
             PreparedStatement statement_View = conn.prepareStatement(sql_View);
-            PreparedStatement statement_danmu = conn.prepareStatement(sql_danmu);
+            PreparedStatement statement_danmu = conn.prepareStatement(sql_danmu, Statement.RETURN_GENERATED_KEYS);
             PreparedStatement statement_Danmu_like = conn.prepareStatement(sql_Danmu_like);
             conn.setAutoCommit(false);
             int cnt = 0;
@@ -256,12 +313,11 @@ public class DatabaseServiceImpl implements DatabaseService {
             int cnt_like = 0;
             for (DanmuRecord danmuRecord : danmuRecords) {
                 cnt++;
-                statement_danmu.setLong(1, cnt);
-                statement_danmu.setString(2, danmuRecord.getBv());
-                statement_danmu.setLong(3, danmuRecord.getMid());
-                statement_danmu.setFloat(4, danmuRecord.getTime());
-                statement_danmu.setString(5, danmuRecord.getContent());
-                statement_danmu.setTimestamp(6, danmuRecord.getPostTime());
+                statement_danmu.setString(1, danmuRecord.getBv());
+                statement_danmu.setLong(2, danmuRecord.getMid());
+                statement_danmu.setFloat(3, danmuRecord.getTime());
+                statement_danmu.setString(4, danmuRecord.getContent());
+                statement_danmu.setTimestamp(5, danmuRecord.getPostTime());
                 statement_danmu.addBatch();
 
                 if (cnt % BATCH2_SIZE == 0) {
