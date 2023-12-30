@@ -36,7 +36,8 @@ public class RecommenderServiceImpl implements RecommenderService {
      * If any of the corner case happened, {@code null} shall be returned.
      */
 
-    UserServiceImpl userService;
+    UserServiceImpl userService = new UserServiceImpl();
+
     @Override
     public List<String> recommendNextVideo(String bv) {
         /**
@@ -53,9 +54,9 @@ public class RecommenderServiceImpl implements RecommenderService {
          */
         Connection con = null;
 
-        io.sustc.service.impl.Logger logger =new Logger();
-        try{
-            logger.function("recommendNextVideo");
+        io.sustc.service.impl.Logger logger = new Logger();
+        try {
+            //logger.function("recommendNextVideo");
             con = ConnectionPool.getConnection();
             ResultSet re;
             String sql = "select * from videos where bv = ?";
@@ -66,20 +67,20 @@ public class RecommenderServiceImpl implements RecommenderService {
             boolean flag = false;
             String BV_String = null;
             ArrayList<String> s_list = new ArrayList<String>();
-            while(re.next()){
+            while (re.next()) {
                 flag = true;
                 BV_String = re.getString("bv");
             }
-            if(!flag){
+            if (!flag) {
                 return null;
             }
-            sql = "SELECT v1.bv, COUNT(*) as similarity " +
-                    "FROM View v1 " +
-                    "JOIN View v2 ON v1.mid = v2.mid AND v1.bv != v2.bv " +
-                    "WHERE v2.bv = ? " +
-                    "GROUP BY v1.bv " +
-                    "ORDER BY similarity DESC " +
-                    "LIMIT 5";
+            sql = "SELECT v1.bv, COUNT(*) as similarity\n" +
+                    "                  FROM View v1\n" +
+                    "                    JOIN View v2 ON v1.mid = v2.mid AND v1.bv != v2.bv\n" +
+                    "                    WHERE v2.bv = 'BV1Rg411w7uU'\n" +
+                    "                    GROUP BY v1.bv\n" +
+                    "                    ORDER BY similarity DESC, v1.bv ASC \n" +
+                    "                    LIMIT 5;";
             ps = con.prepareStatement(sql);
             ps.setString(1, bv);
             re = ps.executeQuery();
@@ -93,7 +94,7 @@ public class RecommenderServiceImpl implements RecommenderService {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             ConnectionPool.releaseConnection(con);
         }
     }
@@ -129,68 +130,60 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
-        Logger logger =new Logger();
+        Logger logger = new Logger();
         try {
-            logger.function("generalRecommendations");
+            //logger.function("generalRecommendations"+" "+pageSize+" "+pageNum);
+            if (pageNum <= 0 || pageSize <= 0) {
+                return null;
+            }
             con = ConnectionPool.getConnection();
             ResultSet re;
-            String sql = "SELECT v.bv, \n" +
-                    "       CASE \n" +
-                    "           WHEN total_views = 0 THEN 0\n" +
-                    "           ELSE GREATEST(1, like_count) / total_views\n" +
-                    "       END AS like_rate,\n" +
-                    "       CASE \n" +
-                    "           WHEN total_views = 0 THEN 0\n" +
-                    "           ELSE GREATEST(1, coin_count) / total_views\n" +
-                    "       END AS coin_rate,\n" +
-                    "       CASE \n" +
-                    "           WHEN total_views = 0 THEN 0\n" +
-                    "           ELSE GREATEST(1, fav_count) / total_views\n" +
-                    "       END AS fav_rate,\n" +
-                    "       CASE \n" +
-                    "           WHEN total_views = 0 THEN 0\n" +
-                    "           ELSE AVG(danmu_count)\n" +
-                    "       END AS avg_danmu,\n" +
-                    "       CASE \n" +
-                    "           WHEN total_views = 0 THEN 0\n" +
-                    "           ELSE AVG(view / duration)\n" +
-                    "       END AS avg_finish,\n" +
-                    "       CASE \n" +
-                    "           WHEN total_views = 0 THEN 0\n" +
-                    "           ELSE (like_rate + coin_rate + fav_rate + avg_danmu + avg_finish)\n" +
-                    "       END AS score\n" +
-                    "FROM videos v\n" +
-                    "LEFT JOIN (\n" +
-                    "    SELECT bv, COUNT(*) as total_views\n" +
-                    "    FROM View\n" +
-                    "    GROUP BY bv\n" +
-                    ") vws ON v.bv = vws.bv\n" +
-                    "LEFT JOIN (\n" +
-                    "    SELECT bv, COUNT(*) as like_count\n" +
-                    "    FROM liker\n" +
-                    "    GROUP BY bv\n" +
-                    ") l ON v.bv = l.bv\n" +
-                    "LEFT JOIN (\n" +
-                    "    SELECT bv, COUNT(*) as coin_count\n" +
-                    "    FROM coin\n" +
-                    "    GROUP BY bv\n" +
-                    ") c ON v.bv = c.bv\n" +
-                    "LEFT JOIN (\n" +
-                    "    SELECT bv, COUNT(*) as fav_count\n" +
-                    "    FROM favorite\n" +
-                    "    GROUP BY bv\n" +
-                    ") f ON v.bv = f.bv\n" +
-                    "LEFT JOIN (\n" +
-                    "    SELECT bv, COUNT(*) as danmu_count\n" +
-                    "    FROM Danmu\n" +
-                    "    GROUP BY bv, mid\n" +
-                    ") d ON v.bv = d.bv\n" +
-                    "LEFT JOIN (\n" +
-                    "    SELECT bv, view, duration\n" +
-                    "    FROM View\n" +
-                    "    JOIN videos ON View.bv = videos.bv\n" +
-                    ") w ON v.bv = w.bv\n" +
-                    "GROUP BY v.bv\n" +
+            String sql = "SELECT sub.bv,\n" +
+                    "       sub.like_rate,\n" +
+                    "       sub.coin_rate,\n" +
+                    "       sub.fav_rate,\n" +
+                    "       AVG(sub.danmu_count) AS avg_danmu,\n" +
+                    "       sub.avg_finish,\n" +
+                    "       (sub.like_rate + sub.coin_rate + sub.fav_rate + AVG(sub.danmu_count) + sub.avg_finish) AS score,\n" +
+                    "       sub.total_views as total_view\n" +
+                    "FROM (\n" +
+                    "    SELECT v.bv,\n" +
+                    "           COALESCE(l.like_count, 0.0) / NULLIF(vws.total_views, 0) AS like_rate,\n" +
+                    "           COALESCE(c.coin_count, 0.0) / NULLIF(vws.total_views, 0) AS coin_rate,\n" +
+                    "           COALESCE(f.fav_count, 0.0) / NULLIF(vws.total_views, 0) AS fav_rate,\n" +
+                    "           COALESCE(d.danmu_count,0.0) / NULLIF(vws.total_views, 0.0) AS danmu_count,\n" +
+                    "           SUM(vw.view) / NULLIF(COUNT(vw.view) * MAX(v.duration), 0) AS avg_finish,\n" +
+                    "           vws.total_views as total_views\n" +
+                    "    FROM videos v\n" +
+                    "    LEFT JOIN View vw ON v.bv = vw.bv\n" +
+                    "    LEFT JOIN (\n" +
+                    "        SELECT bv, COUNT(distinct mid) as total_views\n" +
+                    "        FROM View\n" +
+                    "        GROUP BY bv\n" +
+                    "    ) vws ON v.bv = vws.bv\n" +
+                    "    LEFT JOIN (\n" +
+                    "        SELECT bv, COUNT(*) as like_count\n" +
+                    "        FROM liker\n" +
+                    "        GROUP BY bv\n" +
+                    "    ) l ON v.bv = l.bv\n" +
+                    "    LEFT JOIN (\n" +
+                    "        SELECT bv, COUNT(*) as coin_count\n" +
+                    "        FROM coin\n" +
+                    "        GROUP BY bv\n" +
+                    "    ) c ON v.bv = c.bv\n" +
+                    "    LEFT JOIN (\n" +
+                    "        SELECT bv, COUNT(*) as fav_count\n" +
+                    "        FROM favorite\n" +
+                    "        GROUP BY bv\n" +
+                    "    ) f ON v.bv = f.bv\n" +
+                    "    LEFT JOIN (\n" +
+                    "        SELECT bv, COUNT(*) as danmu_count\n" +
+                    "        FROM Danmu\n" +
+                    "        GROUP BY bv\n" +
+                    "    ) d ON v.bv = d.bv\n" +
+                    "    GROUP BY v.bv, vws.total_views, l.like_count, c.coin_count, f.fav_count, d.danmu_count\n" +
+                    ") sub\n" +
+                    "GROUP BY sub.bv, sub.like_rate, sub.coin_rate, sub.fav_rate, sub.avg_finish, sub.total_views\n" +
                     "ORDER BY score DESC\n" +
                     "LIMIT ? OFFSET ?;";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -205,18 +198,18 @@ public class RecommenderServiceImpl implements RecommenderService {
                 //System.out.println("BV: " + bv);
                 s_list.add(bv);
             }
-            if(!flag){
+            if (!flag) {
                 return new ArrayList<String>();
             }
             return s_list;
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             ConnectionPool.releaseConnection(con);
         }
     }
 
-        @Override
+    @Override
     public List<String> recommendVideosForUser(AuthInfo auth, int pageSize, int pageNum) {
         /**
          * Recommends videos for a user, restricted on their interests.
@@ -245,16 +238,17 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
-            Logger logger =new Logger();
+        Logger logger = new Logger();
         try {
-            logger.function("recommendVideosForUser");
+            //logger.function("recommendVideosForUser");
             con = ConnectionPool.getConnection();
-            if(pageNum <= 0 || pageSize <= 0){
+            if (pageNum <= 0 || pageSize <= 0) {
                 return null;
             }
-            if(userService.checkUser(auth) == false){
+            if (checkUser(auth) == false) {
                 return null;
             }
+            long MID = getMid(auth);
             ResultSet re;
             String sql = "SELECT COUNT(DISTINCT vw.bv) AS videos_watched_by_friends\n" +
                     "FROM follows f1\n" +
@@ -262,33 +256,33 @@ public class RecommenderServiceImpl implements RecommenderService {
                     "JOIN View vw ON f1.followee = vw.mid\n" +
                     "WHERE f1.follower = ? -- 当前用户的mid\n";
             PreparedStatement _ps = con.prepareStatement(sql);
-            _ps.setLong(1, auth.getMid());
+            _ps.setLong(1, MID);
             re = _ps.executeQuery();
             int videos_watched_by_friends = 0;
-            while (re.next()) {
+            if (re.next()) {
                 videos_watched_by_friends = re.getInt("videos_watched_by_friends");
             }
-            if(videos_watched_by_friends == 0) {
+            if (videos_watched_by_friends == 0) {
                 return generalRecommendations(pageSize, pageNum);
             }
 
             String _sql = "SELECT v.bv, v.title, COUNT(distinct f1.follower) AS friend_count, v.mid, u.level, v.public_time\n" +
                     "FROM follows f1\n" +
                     "JOIN follows f2 ON f1.follower = f2.followee AND f1.followee = f2.follower\n" +
-                    "JOIN View vw ON f1.followee = vw.mid\n" +
+                    "JOIN View vw ON f1.follower = vw.mid\n" +
                     "JOIN videos v ON vw.bv = v.bv\n" +
                     "JOIN t_user u ON v.mid = u.mid\n" +
-                    "WHERE f1.follower = ?\n" +
+                    "WHERE f1.followee = ?\n" +
                     "  AND NOT EXISTS (\n" +
                     "      SELECT 1 FROM View\n" +
                     "      WHERE mid = ? AND bv = v.bv\n" +
                     "  )\n" +
                     "GROUP BY v.bv, v.title, v.mid, u.level, v.public_time\n" +
                     "ORDER BY friend_count DESC, u.level DESC, v.public_time DESC\n" +
-                    "LIMIT ? OFFSET ?;\n";
+                    "LIMIT ? OFFSET ?;";
             PreparedStatement ps = con.prepareStatement(_sql);
-            ps.setLong(1, auth.getMid());
-            ps.setLong(2, auth.getMid());
+            ps.setLong(1, MID);
+            ps.setLong(2, MID);
             ps.setInt(3, pageSize);
             ps.setInt(4, (pageNum - 1) * pageSize);
             re = ps.executeQuery();
@@ -300,7 +294,7 @@ public class RecommenderServiceImpl implements RecommenderService {
                 //System.out.println("BV: " + bv);
                 s_list.add(bv);
             }
-            if(!flag){
+            if (!flag) {
                 return new ArrayList<String>();
             }
             return s_list;
@@ -334,15 +328,15 @@ public class RecommenderServiceImpl implements RecommenderService {
          * If any of the corner case happened, {@code null} shall be returned.
          */
         Connection con = null;
-        Logger logger =new Logger();
+        Logger logger = new Logger();
         try {
             con = ConnectionPool.getConnection();
-            logger.function("recommendFriends");
+            //logger.function("recommendFriends");
             ResultSet re;
-            if(pageNum <= 0 || pageSize <= 0){
+            if (pageNum <= 0 || pageSize <= 0) {
                 return null;
             }
-            if(userService.checkUser(auth) == false){
+            if (checkUser(auth) == false) {
                 return null;
             }
             String sql = "SELECT u.mid, COUNT(f2.followee) AS common_followings, u.level\n" +
@@ -370,14 +364,92 @@ public class RecommenderServiceImpl implements RecommenderService {
                 //System.out.println("mid: " + mid);
                 s_list.add(mid);
             }
-            if(!flag){
+            if (!flag) {
                 return new ArrayList<Long>();
             }
             return s_list;
-    } catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
-        }finally {
+        } finally {
             ConnectionPool.releaseConnection(con);
         }
+    }
+
+    boolean checkUser(AuthInfo auth) {
+        Connection con = null;
+        String password = new String();
+        String qq;
+        String wechat;
+        String identity;
+        boolean flag = false;
+        try {
+            con = ConnectionPool.getConnection();
+            //logger.function("checkUser");
+            ResultSet re;
+            String sql_check_mid = "SELECT * FROM t_user WHERE mid = ?";
+            PreparedStatement ps = con.prepareStatement(sql_check_mid);
+            ps.setLong(1, auth.getMid());
+            re = ps.executeQuery();
+            if (re.next()) {
+                password = re.getString("password");
+                qq = re.getString("qq");
+                wechat = re.getString("wechat");
+                identity = re.getString("identity");
+                flag = true;
+            }
+            if (auth.getMid() != 0) {
+                if (flag == false) {
+                    return false;
+                }
+                AESCipher aesCipher = new AESCipher();
+                String P = aesCipher.decrypt(password);
+                if (!auth.getPassword().equals(P)) {
+                    return false;
+                }
+            }
+            if (auth.getMid() == 0 && auth.getQq() == null && auth.getWechat() == null) {
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionPool.releaseConnection(con);
+        }
+    }
+
+    long getMid(AuthInfo auth) {
+        if (auth.getMid() != 0) {
+            return auth.getMid();
+        }
+        Connection con = null;
+        try {
+            con = ConnectionPool.getConnection();
+            if (auth.getQq() != null) {
+                ResultSet re;
+                String sql_check_qq = "SELECT * FROM t_user WHERE qq = ?";
+                PreparedStatement ps = con.prepareStatement(sql_check_qq);
+                ps.setString(1, auth.getQq());
+                re = ps.executeQuery();
+                if (re.next()) {
+                    return re.getLong("mid");
+                }
+            }
+            if (auth.getWechat() != null) {
+                ResultSet re;
+                String sql_check_wechat = "SELECT * FROM t_user WHERE wechat = ?";
+                PreparedStatement ps = con.prepareStatement(sql_check_wechat);
+                ps.setString(1, auth.getWechat());
+                re = ps.executeQuery();
+                if (re.next()) {
+                    return re.getLong("mid");
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionPool.releaseConnection(con);
+        }
+        return 0;
     }
 }

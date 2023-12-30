@@ -331,7 +331,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             conn = ConnectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql_checkMID);
             stmt.setLong(1, auth.getMid());
-            logger.sql(stmt.toString());
+            //logger.sql(stmt.toString());
             ResultSet rs = stmt.executeQuery();//获取结果集
             if (rs.next()) {
                 password = rs.getString("password");
