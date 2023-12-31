@@ -57,7 +57,7 @@ public class BenchmarkService {
         databaseService.truncate();
     }
 
-    //@BenchmarkStep(order = 1, timeout = 35, description = "Import data")
+//    @BenchmarkStep(order = 1, timeout = 35, description = "Import data")
     public BenchmarkResult importData() {
         List<DanmuRecord> danmuRecords = deserialize(BenchmarkConstants.IMPORT_DATA, BenchmarkConstants.DANMU_RECORDS);
         List<UserRecord> userRecords = deserialize(BenchmarkConstants.IMPORT_DATA, BenchmarkConstants.USER_RECORDS);
@@ -98,7 +98,7 @@ public class BenchmarkService {
         return new BenchmarkResult(pass, endTime - startTime);
     }
 
-    //@BenchmarkStep(order = 3, description = "Test VideoService#getAverageViewRate(String)")
+//    @BenchmarkStep(order = 3, description = "Test VideoService#getAverageViewRate(String)")
     public BenchmarkResult videoViewRate() {
         Map<String, Double> cases = deserialize(BenchmarkConstants.TEST_DATA, BenchmarkConstants.VIDEO_VIEW_RATE);
         val pass = new AtomicLong();
@@ -121,7 +121,7 @@ public class BenchmarkService {
         return new BenchmarkResult(pass, endTime - startTime);
     }
 
-    //@BenchmarkStep(order = 4, description = "Test VideoService#getHotspot(String)")
+//    @BenchmarkStep(order = 4, description = "Test VideoService#getHotspot(String)")
     public BenchmarkResult videoHotspot() {
         Map<String, Set<Integer>> cases = deserialize(BenchmarkConstants.TEST_DATA, BenchmarkConstants.VIDEO_HOTSPOT);
         val pass = new AtomicLong();
@@ -144,7 +144,7 @@ public class BenchmarkService {
         return new BenchmarkResult(pass, endTime - startTime);
     }
 
-    //@BenchmarkStep(order = 5, timeout = 8, description = "Test RecommenderService#recommendNextVideo(String)")
+//    @BenchmarkStep(order = 5, timeout = 8, description = "Test RecommenderService#recommendNextVideo(String)")
     public BenchmarkResult recVideo() {
         Map<String, List<String>> cases = deserialize(BenchmarkConstants.TEST_DATA, BenchmarkConstants.REC_VIDEO);
         val pass = new AtomicLong();
@@ -191,7 +191,7 @@ public class BenchmarkService {
         return new BenchmarkResult(pass, endTime - startTime);
     }
 
-    @BenchmarkStep(order = 7, timeout = 8, description = "Test RecommenderService#recommendVideosForUser(AuthInfo, int, int)")
+//    @BenchmarkStep(order = 7, timeout = 8, description = "Test RecommenderService#recommendVideosForUser(AuthInfo, int, int)")
     public BenchmarkResult recUser() {
         List<Map.Entry<Object[], List<String>>> cases = deserialize(BenchmarkConstants.TEST_DATA, BenchmarkConstants.REC_USER);
         val pass = new AtomicLong();
@@ -297,7 +297,7 @@ public class BenchmarkService {
         return new BenchmarkResult(pass, endTime - startTime);
     }
 
-    //@BenchmarkStep(order = 11, description = "Test UserService#getUserInfo(long)")
+    @BenchmarkStep(order = 11, description = "Test UserService#getUserInfo(long)")
     public BenchmarkResult getUserInfo() {
         Map<Long, UserInfoResp> cases = deserialize(BenchmarkConstants.TEST_DATA, BenchmarkConstants.USER_INFO);
         val pass = new AtomicLong();
@@ -347,7 +347,7 @@ public class BenchmarkService {
         return new BenchmarkResult(pass, null);
     }
 
-    //@BenchmarkStep(order = 13, description = "Test VideoService#coinVideo(AuthInfo, String)")
+//    @BenchmarkStep(order = 13, description = "Test VideoService#coinVideo(AuthInfo, String)")
     public BenchmarkResult videoCoin() {
         List<Map.Entry<Object[], Boolean>> cases = deserialize(BenchmarkConstants.TEST_DATA, BenchmarkConstants.VIDEO_COIN);
         val pass = new AtomicLong();

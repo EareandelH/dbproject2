@@ -25,11 +25,13 @@ public class UserServiceImpl implements io.sustc.service.UserService {
     private DataSource dataSource;
     Logger logger =new Logger();
     public long register(RegisterUserReq req){
-        logger.function("register "+req.toString());
+//        logger.function("register "+req.toString());
         Connection con = null;
         try{
+            AESCipher aesCipher = new AESCipher();
             con = ConnectionPool.getConnection();
-            String password = req.getPassword();
+            String password = aesCipher.decrypt(req.getPassword());
+
             if(password==null||password.equals("")){
                 System.out.println("Your password cannot be empty.");
                 return -1;
@@ -179,7 +181,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         return false;
     }
     public UserInfoResp getUserInfo(long mid){
-        logger.function("getUserInfo "+mid);
+//        logger.function("getUserInfo "+mid);
         UserRecord userRecord=selectUser_mid(mid);
         if(userRecord==null){
             System.out.println("Cannot find a user corresponding to the mid: "+mid);
@@ -193,7 +195,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         userInfoResp.setFollowing(ArrayUtils.toPrimitive(user_following(mid).toArray(new Long[0])));
         userInfoResp.setFollower(ArrayUtils.toPrimitive(user_follower(mid).toArray(new Long[0])));
         userInfoResp.setWatched(user_watched(mid).toArray(new String[0]));
-        userInfoResp.setPosted(user_watched(mid).toArray(new String[0]));
+        userInfoResp.setPosted(user_posted(mid).toArray(new String[0]));
         return userInfoResp;
     }
 
@@ -207,11 +209,11 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             PreparedStatement statement= con.prepareStatement(sql);
             statement.setLong(1,mid);
             re=statement.executeQuery();
-            logger.sql(sql);
+//            logger.sql(sql);
             if(re.next()){
                 UserRecord userRecord=new UserRecord(re.getLong("mid"),re.getString("name"),
                         re.getString("sex"),re.getString("birthday"),re.getShort("level"),
-                        re.getInt("coin"),re.getString("sign"),(UserRecord.Identity.valueOf(re.getString("identity"))),
+                        re.getInt("coins"),re.getString("sign"),(UserRecord.Identity.valueOf(re.getString("identity"))),
                         re.getString("password"),re.getString("qq"),re.getString("wechat"));
                 return userRecord;
             }
@@ -315,41 +317,47 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         }
         return null;
     }
-    public boolean checkUser(AuthInfo auth) throws Exception {
-        AESCipher aesCipher = new AESCipher();
-        Logger logger = new Logger();
-        String sql_checkMID = """
-                select password,qq,wechat,identity
-                from t_user
-                where mid = ?;""";
-        String password;
+    boolean checkUser(AuthInfo auth) {
+        Connection con = null;
+        String password = new String();
         String qq;
         String wechat;
         String identity;
-        Connection conn = null;
+        boolean flag = false;
         try {
-            conn = ConnectionPool.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql_checkMID);
-            stmt.setLong(1, auth.getMid());
-            //logger.sql(stmt.toString());
-            ResultSet rs = stmt.executeQuery();//获取结果集
-            if (rs.next()) {
-                password = rs.getString("password");
-                qq = rs.getString("qq");
-                wechat = rs.getString("wechat");
-                identity = rs.getString("identity");
-            } else {//找不到mid
+            con = ConnectionPool.getConnection();
+            //logger.function("checkUser");
+            ResultSet re;
+            String sql_check_mid = "SELECT * FROM t_user WHERE mid = ?";
+            PreparedStatement ps = con.prepareStatement(sql_check_mid);
+            ps.setLong(1, auth.getMid());
+            re = ps.executeQuery();
+            if (re.next()) {
+                password = re.getString("password");
+                qq = re.getString("qq");
+                wechat = re.getString("wechat");
+                identity = re.getString("identity");
+                flag = true;
+            }
+            if (auth.getMid() != 0) {
+                if (flag == false) {
+                    return false;
+                }
+                AESCipher aesCipher = new AESCipher();
+                String P = aesCipher.decrypt(password);
+                if (!auth.getPassword().equals(P)) {
+                    return false;
+                }
+            }
+            if (auth.getMid() == 0 && auth.getQq() == null && auth.getWechat() == null) {
                 return false;
             }
-        } catch (SQLException e) {
-            return false;
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         } finally {
-            ConnectionPool.releaseConnection(conn);
+            ConnectionPool.releaseConnection(con);
         }
-        String P = aesCipher.decrypt(password);
-        if (auth.getPassword() != null && !auth.getPassword().equals(P) || auth.getQq() != null && !auth.getQq().equals(qq) || auth.getWechat() != null && !auth.getWechat().equals(wechat))
-            return false;//判断qq、wechat是本人
-        return qq != null || wechat != null || password != null;//三个同时无
     }
     public boolean check_birthday(String birthday){
         // 使用正则表达式匹配“XX月XX日”格式，月份和日期可以是单个或两个数字
@@ -494,7 +502,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             con = ConnectionPool.getConnection();
             ResultSet re;
             ArrayList<String> watched_Array=new ArrayList<>();
-            String sql="select bv from views where mid=?";
+            String sql="select bv from View where mid=?";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setLong(1,mid);
             re=statement.executeQuery();

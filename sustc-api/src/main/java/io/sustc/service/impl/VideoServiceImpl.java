@@ -36,7 +36,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             long mid=auth.getMid();
             VideoRecord video = selcetVideo_Title_Mid(title,mid);
             UserServiceImpl userService=new UserServiceImpl();
-            if(!userService.checkUser(auth)){
+            if(!checkUser(auth)){
                 System.out.println("The auth is invalid");
                 return null;
             }
@@ -93,7 +93,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             PreparedStatement statement=con.prepareStatement(sql);
             UserServiceImpl userService=new UserServiceImpl();
             long mid=auth.getMid();
-            if(!userService.checkUser(auth)){
+            if(!checkUser(auth)){
                 System.out.println("The auth is invalid");
                 return false;
             }
@@ -134,7 +134,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
                 System.out.println("Title cannot be null.");
                 return false;
             }
-            if(!userService.checkUser(auth)){
+            if(!checkUser(auth)){
                 System.out.println("The auth is invalid");
                 return false;
             }
@@ -192,11 +192,11 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
     public List<String> searchVideo(AuthInfo auth, String keywords, int pageSize, int pageNum){
         Connection con = null;
         try {
-            con =ConnectionPool.getConnection();
+            con =dataSource.getConnection();
             UserServiceImpl userService=new UserServiceImpl();
             List<String> videos=new ArrayList<>();
             Map<String, Integer> relevanceMap = new HashMap<>();
-            if(!userService.checkUser(auth)){
+            if(!checkUser(auth)){
                 System.out.println("The auth is invalid.");
                 return null;
             }
@@ -205,7 +205,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
                 return  null;
             }
             if(pageSize<=0){
-                System.out.println("PageSize is invalid.");
+                System.out.println("PageSize is invalid."+pageSize+" "+pageNum);
                 return null;
             }
             if(pageNum<=0){
@@ -244,7 +244,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             Collections.sort(row,comparator);
             int start_index=(pageNum-1)*pageSize;
             int end_index=Math.min(start_index+pageSize,row.size());
-            for(int i=start_index;i<=end_index;i++){
+            for(int i=start_index-1;i<end_index;i++){
                 videos.add(row.get(i));
             }
             return videos;
@@ -258,7 +258,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
     }
 
     public double getAverageViewRate(String bv){
-        logger.function("getAverageViewRate "+bv);
+//        logger.function("getAverageViewRate "+bv);
         try{
             VideoRecord videoRecord=select_BV(bv);
             if(videoRecord==null){
@@ -283,7 +283,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
     }
 
     public Set<Integer> getHotspot(String bv){
-        logger.function("getHotspot");
+//        logger.function("getHotspot");
         Set<Integer> hotspotChunks = new HashSet<>();
         Connection con=null;
         try {
@@ -324,7 +324,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             ResultSet re;
             long mid= auth.getMid();
             UserServiceImpl userService=new UserServiceImpl();
-            if(!userService.checkUser(auth)){
+            if(!checkUser(auth)){
                 System.out.println("The auth is invalid");
                 return false;
             }
@@ -372,8 +372,8 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             con =ConnectionPool.getConnection();
             long mid =auth.getMid();
             UserServiceImpl userService=new UserServiceImpl();
-            if(!userService.checkUser(auth)){
-                System.out.println("The auth is invalid");
+            if(!checkUser(auth)){
+                System.out.println("The auth "+auth.toString()+"is invalid");
                 return false;
             }
             VideoRecord videoRecord = select_BV(bv);
@@ -381,22 +381,32 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
                 System.out.println("Cannot find a video corresponding to the "+bv+".");
                 return false;
             }
-            UserRecord userRecord=userService.selectUser_mid(mid);
+            UserRecord userRecord=null;
+            if(mid!=0){
+                userRecord=userService.selectUser_mid(mid);
+            }
+            else if(auth.getQq()!=null){
+                userRecord=userService.selectUser_qq(auth.getQq());
+            }
+            else if(auth.getWechat()!=null){
+                userRecord=userService.selectUser_wechat(auth.getWechat());
+            }
+
             if(userRecord.getMid()==videoRecord.getOwnerMid()){
                 System.out.println("You cannot coin your own video.");
                 return false;
             }
             Timestamp now = Timestamp.valueOf(LocalDateTime.now());
             if(videoRecord.getReviewTime()==null|| now.before(videoRecord.getPublicTime())){
-                System.out.println("The video is invalid now .");
+                System.out.println("The video "+bv+"is invalid now .");
                 return false;
             }
             if(userRecord.getCoin()==0){
-                System.out.println("You have no coin now.");
+                System.out.println(auth.toString()+"You have no coin now.");
                 return false;
             }
             if(userService.user_coined(mid).contains(bv)){
-                System.out.println("You have coined the video");
+                System.out.println(auth.toString()+"You have coined the video");
                 return false;
             }
             String sql="insert into coin (bv,mid) values(?,?)";
@@ -405,7 +415,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             statement.setLong(2,mid);
             int affected = statement.executeUpdate();
             if(affected>0){
-                System.out.println("Successfully deposited coins!");
+                System.out.println(auth.toString()+"Successfully deposited coins!");
                 return true;
             }
         }catch (Exception e){
@@ -423,7 +433,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             con =ConnectionPool.getConnection();
             long mid =auth.getMid();
             UserServiceImpl userService=new UserServiceImpl();
-            if(!userService.checkUser(auth)){
+            if(!checkUser(auth)){
                 System.out.println("The auth is invalid");
                 return false;
             }
@@ -475,7 +485,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             con =ConnectionPool.getConnection();
             long mid =auth.getMid();
             UserServiceImpl userService=new UserServiceImpl();
-            if(!userService.checkUser(auth)){
+            if(!checkUser(auth)){
                 System.out.println("The auth is invalid");
                 return false;
             }
@@ -660,5 +670,47 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             e.printStackTrace();
         }
         return "NULL";
+    }
+    boolean checkUser(AuthInfo auth) {
+        Connection con = null;
+        String password = new String();
+        String qq;
+        String wechat;
+        String identity;
+        boolean flag = false;
+        try {
+            con = ConnectionPool.getConnection();
+            //logger.function("checkUser");
+            ResultSet re;
+            String sql_check_mid = "SELECT * FROM t_user WHERE mid = ?";
+            PreparedStatement ps = con.prepareStatement(sql_check_mid);
+            ps.setLong(1, auth.getMid());
+            re = ps.executeQuery();
+            if (re.next()) {
+                password = re.getString("password");
+                qq = re.getString("qq");
+                wechat = re.getString("wechat");
+                identity = re.getString("identity");
+                flag = true;
+            }
+            if (auth.getMid() != 0) {
+                if (flag == false) {
+                    return false;
+                }
+                AESCipher aesCipher = new AESCipher();
+                String P = aesCipher.decrypt(password);
+                if (!auth.getPassword().equals(P)) {
+                    return false;
+                }
+            }
+            if (auth.getMid() == 0 && auth.getQq() == null && auth.getWechat() == null) {
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            ConnectionPool.releaseConnection(con);
+        }
     }
 }

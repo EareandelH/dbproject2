@@ -1,0 +1,650 @@
+[Function] getHotspot [Time]Sun Dec 24 16:06:09 CST 2023
+[Function] getHotspot [Time]Sun Dec 24 16:06:17 CST 2023
+[Function] getHotspot [Time]Sun Dec 24 16:12:08 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','��','11��12��',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: ����: �ظ���Υ��ΨһԼ��"t_user_pkey"
+  ��ϸ����ֵ"(mid)=(1703941)" �Ѿ�����  Call getNextException to see other errors in the batch. [Time]Sun Dec 24 17:02:18 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','��','11��12��',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: ����: ��ϵ "t_user" ������
+  λ�ã�13  Call getNextException to see other errors in the batch. [Time]Sun Dec 24 17:03:16 CST 2023
+[DEBUG] Batch entry 0 insert into Danmu_like (id, likeBy) values (1, 398764) was aborted: ����: �������±� "danmu_like" Υ�����Լ�� "danmu_like_id_fkey"
+  ��ϸ����ֵ��(id)=(1)û���ڱ�"danmu"�г���.  Call getNextException to see other errors in the batch. [Time]Sun Dec 24 17:30:24 CST 2023
+[SQL] HikariProxyPreparedStatement@223911301 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -6049290871113308438 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@239567237 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@1513049796 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@1298464629 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@614121521 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@1620257900 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@1125169184 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@1891983289 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 1973317 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@1908576481 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@1858071339 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 304291 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@528523125 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -1446971353083144826 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@2040450888 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@1390104761 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:30:55 CST 2023
+
+[Function] getAverageViewRate BV0284c8cd79 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BVc841060841 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV6ab3d67e33 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1rq4y1k7SH [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1yX4y1T7nY [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV54320d7388 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1cX4y1L7nq [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV187411H782 [Time]Sun Dec 24 17:30:55 CST 2023
+
+
+[Function] getAverageViewRate BV152359a293 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV81ae89d956 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BVea6780f5f2 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1Ah411m7GM [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1U94y1d71R [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1P7411g7Jk [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1Wh4y1G74h [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1ef4y1R71D [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV006bf92885 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1pM4y1e7Ke [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1P64y1o7RZ [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1JZ4y1h7nD [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1s7411j7yk [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1fW4y1f7Eu [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1bt4y1x7Wk [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV15u41187N1 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1PK4y1b7dt [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1Q3411M79u [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1mG4y1z761 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1FJ411M7rM [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BVbe4fe99408 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1VG4y1K7Nu [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV19t4y1E7hh [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1c606c2874 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1Mv4y1N7WJ [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 17:30:55 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 17:30:55 CST 2023
+[SQL] HikariProxyPreparedStatement@706875655 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@1094029241 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -8441848716314224383 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@253346441 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -6049290871113308438 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@107174202 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@1692199555 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@90798503 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@1414191145 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@1164444790 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@1528569566 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@1902365504 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -1446971353083144826 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@751542183 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@1882643720 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[SQL] HikariProxyPreparedStatement@1800226652 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1MJ411U7T5 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV0284c8cd79 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1ef4y1R71D [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1CP4y1H7SB [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BVff4cc24b0c [Time]Sun Dec 24 17:36:45 CST 2023
+
+
+
+[Function] getAverageViewRate BV1P64y1o7RZ [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BVea6780f5f2 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1P7411g7Jk [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV006bf92885 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1bt4y1x7Wk [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1cX4y1L7nq [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV152359a293 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 17:36:45 CST 2023
+
+[Function] getAverageViewRate BV1JZ4y1h7nD [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV81ae89d956 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BVbe4fe99408 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1mG4y1z761 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1Mv4y1N7WJ [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1pM4y1e7Ke [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1FJ411M7rM [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1s7411j7yk [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1PK4y1b7dt [Time]Sun Dec 24 17:36:45 CST 2023
+
+[Function] getAverageViewRate BV15u41187N1 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1c606c2874 [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 17:36:45 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 17:36:45 CST 2023
+[DEBUG] Batch entry 0 insert into Danmu_like (id, likeBy) values (1, 398764) was aborted: ����: �������±� "danmu_like" Υ�����Լ�� "danmu_like_id_fkey"
+  ��ϸ����ֵ��(id)=(1)û���ڱ�"danmu"�г���.  Call getNextException to see other errors in the batch. [Time]Sun Dec 24 17:56:07 CST 2023
+[SQL] HikariProxyPreparedStatement@564862551 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:56:08 CST 2023
+[SQL] HikariProxyPreparedStatement@812670622 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:56:37 CST 2023
+[SQL] HikariProxyPreparedStatement@4445411 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:56:37 CST 2023
+[SQL] HikariProxyPreparedStatement@41583785 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 304291 [Time]Sun Dec 24 17:56:37 CST 2023
+[SQL] HikariProxyPreparedStatement@1667656196 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:56:37 CST 2023
+[SQL] HikariProxyPreparedStatement@960001908 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:56:37 CST 2023
+[SQL] HikariProxyPreparedStatement@1717080530 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:56:37 CST 2023
+[SQL] HikariProxyPreparedStatement@1391975036 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 0 [Time]Sun Dec 24 17:56:37 CST 2023
+[SQL] HikariProxyPreparedStatement@1025852167 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -6049290871113308438 [Time]Sun Dec 24 17:56:37 CST 2023
+[SQL] HikariProxyPreparedStatement@1798004501 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -1446971353083144826 [Time]Sun Dec 24 17:56:37 CST 2023
+
+[Function] getAverageViewRate BVc841060841 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV6ab3d67e33 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1P64y1o7RZ [Time]Sun Dec 24 17:56:38 CST 2023
+
+
+
+[Function] getAverageViewRate BV152359a293 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1fW4y1f7Eu [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1fu411L7FW [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1U94y1d71R [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV187411H782 [Time]Sun Dec 24 17:56:38 CST 2023
+
+[Function] getAverageViewRate BV19t4y1E7hh [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BVea6780f5f2 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1ef4y1R71D [Time]Sun Dec 24 17:56:38 CST 2023
+
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1mG4y1z761 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1Q3411M79u [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1pM4y1e7Ke [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1s7411j7yk [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BVbe4fe99408 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV006bf92885 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1Yb4y1q7FH [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1FJ411M7rM [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1c606c2874 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1Wh4y1G74h [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1Mv4y1N7WJ [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 17:56:38 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 17:56:38 CST 2023
+[SQL] HikariProxyPreparedStatement@547235579 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -6049290871113308438 [Time]Sun Dec 24 18:19:17 CST 2023
+[SQL] HikariProxyPreparedStatement@926989570 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 304291 [Time]Sun Dec 24 18:19:17 CST 2023
+[SQL] HikariProxyPreparedStatement@647759446 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 1973317 [Time]Sun Dec 24 18:19:17 CST 2023
+[SQL] HikariProxyPreparedStatement@1599078678 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -1446971353083144826 [Time]Sun Dec 24 18:19:17 CST 2023
+[SQL] HikariProxyPreparedStatement@1884187082 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -8441848716314224383 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV0284c8cd79 [Time]Sun Dec 24 18:19:18 CST 2023
+
+[Function] getAverageViewRate BV1Yb4y1q7FH [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1s7411j7yk [Time]Sun Dec 24 18:19:18 CST 2023
+
+
+[Function] getAverageViewRate BV1pM4y1e7Ke [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1fu411L7FW [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1Ah411m7GM [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV81ae89d956 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV6ab3d67e33 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1yX4y1T7nY [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1fW4y1f7Eu [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV15u41187N1 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1P64y1o7RZ [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1rq4y1k7SH [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BVedeefb9a7d [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BVff4cc24b0c [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1Rg411w7uU [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV54320d7388 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV152359a293 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1PK4y1b7dt [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BVea6780f5f2 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1bt4y1x7Wk [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1U94y1d71R [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV006bf92885 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1Wh4y1G74h [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1Mv4y1N7WJ [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1P7411g7Jk [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1c606c2874 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 18:19:18 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 18:19:18 CST 2023
+[SQL] HikariProxyPreparedStatement@1594166986 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -1446971353083144826 [Time]Sun Dec 24 18:20:28 CST 2023
+[SQL] HikariProxyPreparedStatement@1094029241 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -8441848716314224383 [Time]Sun Dec 24 18:20:29 CST 2023
+[SQL] HikariProxyPreparedStatement@1626555733 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 1973317 [Time]Sun Dec 24 18:20:29 CST 2023
+[SQL] HikariProxyPreparedStatement@31337666 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -6049290871113308438 [Time]Sun Dec 24 18:20:29 CST 2023
+[SQL] HikariProxyPreparedStatement@1435343743 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 304291 [Time]Sun Dec 24 18:20:29 CST 2023
+
+
+[Function] getAverageViewRate BV1Ah411m7GM [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BVc841060841 [Time]Sun Dec 24 18:20:29 CST 2023[Function] getAverageViewRate BV1yX4y1T7nY [Time]Sun Dec 24 18:20:29 CST 2023
+
+[Function] getAverageViewRate BV1rq4y1k7SH [Time]Sun Dec 24 18:20:29 CST 2023
+
+[Function] getAverageViewRate BV1fu411L7FW [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1Rg411w7uU [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1P7411g7Jk [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1fW4y1f7Eu [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1PK4y1b7dt [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV152359a293 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1P64y1o7RZ [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1ef4y1R71D [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV81ae89d956 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1Yb4y1q7FH [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BVedeefb9a7d [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV54320d7388 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1JZ4y1h7nD [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1Wh4y1G74h [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1mG4y1z761 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1U94y1d71R [Time]Sun Dec 24 18:20:29 CST 2023
+
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 18:20:29 CST 2023
+
+[Function] getAverageViewRate BV19t4y1E7hh [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 18:20:29 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 18:20:29 CST 2023
+
+[Function] getAverageViewRate BV1Rg411w7uU [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1fW4y1f7Eu [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV19t4y1E7hh [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1U94y1d71R [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1Mv4y1N7WJ [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV187411H782 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1pM4y1e7Ke [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1Q3411M79u [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BVea6780f5f2 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1ef4y1R71D [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1s7411j7yk [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV006bf92885 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1FJ411M7rM [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1cX4y1L7nq [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1P7411g7Jk [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1fu411L7FW [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1JZ4y1h7nD [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1mG4y1z761 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BVbe4fe99408 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1Yb4y1q7FH [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV81ae89d956 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV15u41187N1 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1Wh4y1G74h [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1PK4y1b7dt [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1c606c2874 [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 18:25:44 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 18:25:44 CST 2023
+[SQL] HikariProxyPreparedStatement@2018851919 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -8441848716314224383 [Time]Sun Dec 24 18:32:50 CST 2023
+[SQL] HikariProxyPreparedStatement@249137443 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 304291 [Time]Sun Dec 24 18:32:51 CST 2023
+[SQL] HikariProxyPreparedStatement@930083971 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -1446971353083144826 [Time]Sun Dec 24 18:32:51 CST 2023
+[SQL] HikariProxyPreparedStatement@1565655312 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -6049290871113308438 [Time]Sun Dec 24 18:32:51 CST 2023
+[SQL] HikariProxyPreparedStatement@1831743838 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 1973317 [Time]Sun Dec 24 18:32:51 CST 2023
+[Function] getAverageViewRate BV0284c8cd79 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1JZ4y1h7nD [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1yX4y1T7nY [Time]Sun Dec 24 18:32:52 CST 2023
+
+
+
+
+
+[Function] getAverageViewRate BV1fu411L7FW [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1mG4y1z761 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1U94y1d71R [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1VG4y1K7Nu [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BVff4cc24b0c [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1P64y1o7RZ [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1PK4y1b7dt [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1ef4y1R71D [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1pM4y1e7Ke [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1FJ411M7rM [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BVea6780f5f2 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1bt4y1x7Wk [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1fW4y1f7Eu [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV54320d7388 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1s7411j7yk [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1rq4y1k7SH [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV152359a293 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1Ah411m7GM [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV19t4y1E7hh [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1Mv4y1N7WJ [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV15u41187N1 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1Wh4y1G74h [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1c606c2874 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1P7411g7Jk [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV006bf92885 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 18:32:52 CST 2023
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 18:32:52 CST 2023
+[SQL] HikariProxyPreparedStatement@844594371 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 304291 [Time]Sun Dec 24 18:34:06 CST 2023
+[SQL] HikariProxyPreparedStatement@156199502 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -6049290871113308438 [Time]Sun Dec 24 18:34:06 CST 2023
+[SQL] HikariProxyPreparedStatement@1727240480 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 1973317 [Time]Sun Dec 24 18:34:06 CST 2023
+[SQL] HikariProxyPreparedStatement@1516493535 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -8441848716314224383 [Time]Sun Dec 24 18:34:06 CST 2023
+[SQL] HikariProxyPreparedStatement@860212322 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -1446971353083144826 [Time]Sun Dec 24 18:34:06 CST 2023
+[Function] getAverageViewRate BV1j5411H7zk [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV187411H782 [Time]Sun Dec 24 18:34:07 CST 2023
+
+[Function] getAverageViewRate BV1Yb4y1q7FH [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1CP4y1H7SB [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV6ab3d67e33 [Time]Sun Dec 24 18:34:07 CST 2023
+
+[Function] getAverageViewRate BV81ae89d956 [Time]Sun Dec 24 18:34:07 CST 2023
+
+[Function] getAverageViewRate BVbe4fe99408 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1P7411g7Jk [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1Ah411m7GM [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BVedeefb9a7d [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV54320d7388 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1Rg411w7uU [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1P64y1o7RZ [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1PK4y1b7dt [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1ef4y1R71D [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1rq4y1k7SH [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1U94y1d71R [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1c606c2874 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV152359a293 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1fW4y1f7Eu [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1pM4y1e7Ke [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1mG4y1z761 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BVff4cc24b0c [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1FJ411M7rM [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1s7411j7yk [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1bt4y1x7Wk [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1Mv4y1N7WJ [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1Wh4y1G74h [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BVea6780f5f2 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV15u41187N1 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV006bf92885 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV19t4y1E7hh [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 18:34:07 CST 2023
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 18:34:07 CST 2023
+[SQL] HikariProxyPreparedStatement@1025473324 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 1973317 [Time]Sun Dec 24 18:35:28 CST 2023
+[SQL] HikariProxyPreparedStatement@2071940606 wrapping select password,qq,wechat,identity
+from t_user
+where mid = 304291 [Time]Sun Dec 24 18:35:28 CST 2023
+[SQL] HikariProxyPreparedStatement@800401524 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -6049290871113308438 [Time]Sun Dec 24 18:35:28 CST 2023
+[SQL] HikariProxyPreparedStatement@1232165779 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -8441848716314224383 [Time]Sun Dec 24 18:35:28 CST 2023
+[SQL] HikariProxyPreparedStatement@281827637 wrapping select password,qq,wechat,identity
+from t_user
+where mid = -1446971353083144826 [Time]Sun Dec 24 18:35:28 CST 2023
+
+[Function] getAverageViewRate BV1Yb4y1q7FH [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1mG4y1z761 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV81ae89d956 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1CP4y1H7SB [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BVbe4fe99408 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1Q3411M79u [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1cX4y1L7nq [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1fu411L7FW [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1yX4y1T7nY [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1P64y1o7RZ [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1pM4y1e7Ke [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1ef4y1R71D [Time]Sun Dec 24 18:35:29 CST 2023
+
+[Function] getAverageViewRate BV1v54y1u7m1 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1rq4y1k7SH [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1PK4y1b7dt [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1Ah411m7GM [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1P7411g7Jk [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1vZ4y187Zs [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV152359a293 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1fW4y1f7Eu [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BVff4cc24b0c [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1Kb411L79v [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1VG4y1K7Nu [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1Rg411w7uU [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1XP4y1T7zz [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BVedeefb9a7d [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV54320d7388 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1bt4y1x7Wk [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1Mv4y1N7WJ [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BVea6780f5f2 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1mX4y1N7yU [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1wd4y1G7Rd [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1c606c2874 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV19t4y1E7hh [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1e3dc44a97 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV14r4y1i7vZ [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV79c1a76790 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1aG4y1z746 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1U94y1d71R [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1p44y1i7cb [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV15u41187N1 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1F7411v7MH [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1sz411z7Qb [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1p5411879s [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV6429b8265c [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV006bf92885 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV54933a52f3 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1cJ411H77j [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1Q7411J751 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV44519b5ed4 [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1aU4y1G7ek [Time]Sun Dec 24 18:35:29 CST 2023
+[Function] getAverageViewRate BV1Wh4y1G74h [Time]Sun Dec 24 18:35:29 CST 2023
