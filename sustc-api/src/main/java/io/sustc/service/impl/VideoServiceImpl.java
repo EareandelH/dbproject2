@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Date;
 
 @Service
 @Slf4j
@@ -66,6 +67,9 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             String name=userRecord.getName();
             Timestamp public_time=req.getPublicTime();
             Timestamp now=Timestamp.valueOf(LocalDateTime.now());
+            if(public_time==null){
+                return null;
+            }
             if(public_time.compareTo(now)<0){
 //                System.out.println("You cannot post a video before the current time.");
                 return null;
@@ -160,16 +164,16 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             UserServiceImpl userService=new UserServiceImpl();
             String new_title=req.getTitle();
             if(new_title.equals("")){
-//                System.out.println("Title cannot be null."+bv);
+                System.out.println("Title cannot be null."+bv);
                 return false;
             }
             if(!checkUser(auth)){
-//                System.out.println("The auth is invalid"+bv);
+                System.out.println("The auth is invalid"+bv);
                 return false;
             }
             VideoRecord videoRecord = select_BV(bv);
             if(videoRecord==null){
-//                System.out.println("Cannot find a video corresponding to the "+bv+".");
+                System.out.println("Cannot find a video corresponding to the "+bv+".");
                 return false;
             }
             UserRecord userRecord=null;
@@ -186,11 +190,19 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
 //                System.out.println("get userrecord from wechat "+userRecord.toString());
             }
             if(userRecord==null){
-//                System.out.println("No user "+auth.toString()+bv);
+                System.out.println("No user "+auth.toString()+bv);
                 return false;
             }
-            if(videoRecord.getOwnerMid()!=userRecord.getMid()){
-////                System.out.println(userRecord.getMid()+" You are not the owner of the video nor a superuser."+videoRecord.getOwnerMid()+" "+bv);
+//            if(videoRecord.getOwnerMid()!=userRecord.getMid()){
+//                System.out.println(userRecord.getMid()+" You are not the owner of the video nor a superuser."+videoRecord.getOwnerMid()+" "+bv);
+//                return false;
+//            }
+            if(req.getPublicTime()==null){
+                System.out.println("publictime null"+req+bv);
+                return false;
+            }
+            if(req.getPublicTime().compareTo(Timestamp.valueOf(LocalDateTime.now()))<0){
+                System.out.println("time afternow"+bv);
                 return false;
             }
             String new_description=req.getDescription();
@@ -200,17 +212,17 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             float old_duration=videoRecord.getDuration();
             long ownerMid= videoRecord.getOwnerMid();
             if(ownerMid!= userRecord.getMid()){
-//                System.out.println("You don't have the authority " +
-//                        "to update the video's information"+bv);
+                System.out.println("You don't have the authority " +
+                        "to update the video's information"+bv);
                 return false;
             }
             if(Math.abs(old_duration-new_duration)>0){
-//                System.out.println("You changed the duration."+bv);
+                System.out.println("You changed the duration."+bv);
                 return false;
             }
 
             if(old_title.equals(new_title)&&old_duration==new_duration&&(old_description==new_description)){
-//                System.out.println("You changed nothing."+bv);
+                System.out.println("You changed nothing."+bv);
                 return false;
             }
 //            String sql="update video set title = \'"+new_title+"\' , description = \'"+
@@ -229,12 +241,12 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             else if(videoRecord.getReviewer()==-1&&videoRecord.getReviewTime()==null) return false;
 
         }catch (Exception e){
-//            System.out.println("try failed "+bv);
+            System.out.println("try failed "+bv);
             e.printStackTrace();
         }finally {
             ConnectionPool.releaseConnection(con);
         }
-//        System.out.println("try out "+bv);
+        System.out.println("try out "+bv);
         return false;
     }
     public List<String> searchVideo(AuthInfo auth, String keywords, int pageSize, int pageNum){
