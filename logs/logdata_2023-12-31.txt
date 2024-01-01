@@ -1427,3 +1427,19 @@
 [SQL] select * from t_user where mid=? [Time]Sun Dec 31 09:11:12 CST 2023
 [SQL] select * from t_user where mid=? [Time]Sun Dec 31 09:11:13 CST 2023
 [SQL] select * from t_user where mid=? [Time]Sun Dec 31 09:11:13 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','男','11月12日',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: 错误: 重复键违反唯一约束"t_user_pkey"
+  详细：键值"(mid)=(1703941)" 已经存在  Call getNextException to see other errors in the batch. [Time]Sun Dec 31 19:35:21 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','男','11月12日',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: 错误: 重复键违反唯一约束"t_user_pkey"
+  详细：键值"(mid)=(1703941)" 已经存在  Call getNextException to see other errors in the batch. [Time]Sun Dec 31 19:44:20 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','男','11月12日',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: 错误: 重复键违反唯一约束"t_user_pkey"
+  详细：键值"(mid)=(1703941)" 已经存在  Call getNextException to see other errors in the batch. [Time]Sun Dec 31 19:46:18 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','男','11月12日',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: 错误: 重复键违反唯一约束"t_user_pkey"
+  详细：键值"(mid)=(1703941)" 已经存在  Call getNextException to see other errors in the batch. [Time]Sun Dec 31 20:11:30 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','男','11月12日',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: 错误: 重复键违反唯一约束"t_user_pkey"
+  详细：键值"(mid)=(1703941)" 已经存在  Call getNextException to see other errors in the batch. [Time]Sun Dec 31 20:18:39 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','男','11月12日',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: 错误: 重复键违反唯一约束"t_user_pkey"
+  详细：键值"(mid)=(1703941)" 已经存在  Call getNextException to see other errors in the batch. [Time]Sun Dec 31 20:34:10 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','男','11月12日',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: 错误: 重复键违反唯一约束"t_user_pkey"
+  详细：键值"(mid)=(1703941)" 已经存在  Call getNextException to see other errors in the batch. [Time]Sun Dec 31 20:41:07 CST 2023
+[DEBUG] Batch entry 0 insert into t_user (mid, coins, name, sex, birthday, level, sign, identity, password, qq, wechat) values (1703941,15,'CCCapson','男','11月12日',6,'','USER','fvO9TFRVJ9iTQRPcQq9AhQ==','4357399','') was aborted: 错误: 重复键违反唯一约束"t_user_pkey"
+  详细：键值"(mid)=(1703941)" 已经存在  Call getNextException to see other errors in the batch. [Time]Sun Dec 31 20:41:34 CST 2023

@@ -30,10 +30,11 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         try{
             AESCipher aesCipher = new AESCipher();
             con = ConnectionPool.getConnection();
-            String password = aesCipher.decrypt(req.getPassword());
+            String password = req.getPassword();
+//            String password = aesCipher.decrypt(req.getPassword());
 
             if(password==null||password.equals("")){
-                System.out.println("Your password cannot be empty.");
+//                System.out.println(req.toString()+" Your password cannot be empty.");
                 return -1;
             }
             Random random = new Random();
@@ -48,28 +49,28 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             String birthday = req.getBirthday();
             String sign = req.getSign();
             if(name==null||name.equals("")){
-                System.out.println("Your name cannot be empty.");
+//                System.out.println("Your name cannot be empty.");
                 return -1;
             }
             if(sex==null){
-                System.out.println("Your sex cannot be empty.");
+//                System.out.println("Your sex cannot be empty.");
                 return -1;
             }
             if(!check_birthday(birthday)){
-                System.out.println("Your birthday is invalid.");
-                System.out.println("The form must be like /'X月X日/'.");
+//                System.out.println("Your birthday is invalid.");
+//                System.out.println("The form must be like /'X月X日/'.");
                 return -1;
             }
             if(selectUser_name(name)!=null){
-                System.out.println("The name has been used.");
+//                System.out.println("The name has been used.");
                 return -1;
             }
             if(selectUser_qq(qq)!=null){
-                System.out.println("The qq has been used.");
+//                System.out.println("The qq has been used.");
                 return -1;
             }
             if(selectUser_wechat(wechat)!=null){
-                System.out.println("The wechat has been used.");
+//                System.out.println("The wechat has been used.");
                 return -1;
             }
             String sql ="insert into t_user (mid, coins,name, sex, birthday, level, sign, identity,password,qq,wechat) " +
@@ -88,7 +89,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             statement.setString(11,wechat);
             int affected=statement.executeUpdate();
             if(affected>0){
-                System.out.println(name+" welcome!");
+//                System.out.println(name+" welcome!");
                 return mid;
             }
         }catch (Exception e){
@@ -104,20 +105,33 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             con =ConnectionPool.getConnection();
             UserRecord userRecord_mid = selectUser_mid(mid);
             if(userRecord_mid==null){
-                System.out.println("Cannot find a user corresponding to the mid: "+mid);
+//                System.out.println("Cannot find a user corresponding to the mid: "+mid);
                 return false;
             }
             if(!checkUser(auth)){
-                System.out.println("The auth is invalid");
+//                System.out.println("The auth is invalid");
                 return false;
             }
-            UserRecord userRecord_current=selectUser_mid(auth.getMid());
+            UserRecord userRecord_current=null;
+            if(auth.getMid()!=0){
+                userRecord_current=selectUser_mid(auth.getMid());
+            }
+            else if(auth.getQq()!=null){
+                userRecord_current=selectUser_qq(auth.getQq());
+            }
+            else if(auth.getWechat()!=null){
+                userRecord_current=selectUser_wechat(auth.getWechat());
+            }
+            if(userRecord_current==null){
+//                System.out.println("No user "+auth.toString());
+                return false;
+            }
             if(userRecord_current.getIdentity()== UserRecord.Identity.USER&&auth.getMid()!=mid){
-                System.out.println("Deer regular user ,you cannot delete the account which not belong to you");
+//                System.out.println("Deer regular user ,you cannot delete the account which not belong to you");
                 return false;
             }
             if(auth.getMid()!=mid&&userRecord_current.getIdentity()== UserRecord.Identity.SUPERUSER&&userRecord_mid.getIdentity()== UserRecord.Identity.SUPERUSER){
-                System.out.println("You cannot delete the account belong to another SUPERUSER");
+//                System.out.println("You cannot delete the account belong to another SUPERUSER");
                 return false;
             }
             String sql="delete from t_user where mid=?";
@@ -125,7 +139,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             statement.setLong(1,mid);
             int affected = statement.executeUpdate();
             if(affected>0){
-                System.out.println("You have delete the account "+mid);
+//                System.out.println("You have delete the account "+mid);
                 return true;
             }
         }catch (Exception e){
@@ -139,28 +153,42 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         Connection con = null;
         try{
             con =ConnectionPool.getConnection();
-            long followerMid =auth.getMid();
 
             if(!checkUser(auth)){
-                System.out.println("The auth is invalid");
+//                System.out.println("The auth is invalid");
                 return false;
             }
             UserRecord userRecord_followee=selectUser_mid(followeeMid);
             if(userRecord_followee==null){
-                System.out.println("Cannot find a mid corresponding to the "+followeeMid+".");
+//                System.out.println("Cannot find a mid corresponding to the "+followeeMid+".");
                 return false;
             }
-            UserRecord userRecord_current=selectUser_mid(auth.getMid());
+
+            UserRecord userRecord_current=null;
+            if(auth.getMid()!=0){
+                userRecord_current=selectUser_mid(auth.getMid());
+            }
+            else if(auth.getQq()!=null){
+                userRecord_current=selectUser_qq(auth.getQq());
+            }
+            else if(auth.getWechat()!=null){
+                userRecord_current=selectUser_wechat(auth.getWechat());
+            }
+            if(userRecord_current==null){
+//                System.out.println("No user "+auth.toString());
+                return false;
+            }
             if(userRecord_current.getMid()==userRecord_followee.getMid()){
-                System.out.println("You cannot follow yourself.");
+//                System.out.println("You cannot follow yourself.");
                 return false;
             }
+            long followerMid=userRecord_current.getMid();
             /*
             优化想法，这里包含一个查询，一个删除操作，可以直接使用删除操作看affected是否为0
             为0即是不存在这一行
              */
             if(user_following(followeeMid).contains(followerMid)){
-                System.out.println("You canceled the follow.");
+//                System.out.println("You canceled the follow.");
                 cancel_follow(followeeMid,followerMid);
                 return false;
             }
@@ -169,10 +197,8 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             statement.setLong(1,followeeMid);
             statement.setLong(2,followerMid);
             int affected = statement.executeUpdate();
-            if(affected>0){
-                System.out.println("Successfully Followed!");
-                return true;
-            }
+//            System.out.println("Successfully Followed!");
+            return true;
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -184,7 +210,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
 //        logger.function("getUserInfo "+mid);
         UserRecord userRecord=selectUser_mid(mid);
         if(userRecord==null){
-            System.out.println("Cannot find a user corresponding to the mid: "+mid);
+//            System.out.println("Cannot find a user corresponding to the mid: "+mid);
             return null;
         }
         UserInfoResp userInfoResp= new UserInfoResp();
@@ -237,7 +263,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             if(re.next()){
                 UserRecord userRecord=new UserRecord(re.getLong("mid"),re.getString("name"),
                         re.getString("sex"),re.getString("birthday"),re.getShort("level"),
-                        re.getInt("coin"),re.getString("sign"),(UserRecord.Identity.valueOf(re.getString("identity"))),
+                        re.getInt("coins"),re.getString("sign"),(UserRecord.Identity.valueOf(re.getString("identity"))),
                         re.getString("password"),re.getString("qq"),re.getString("wechat"));
                 return userRecord;
             }
@@ -259,9 +285,9 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             statement.setLong(1,followeeMid);
             statement.setLong(2,followerMid);
             int affected =statement.executeUpdate();
-            if(affected>0)
-                System.out.println("Follow cancel succeed!");
-            else System.out.println("Cancel failed!");
+//            if(affected>0)
+//                System.out.println("Follow cancel succeed!");
+//            else System.out.println("Cancel failed!");
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -281,7 +307,7 @@ public class UserServiceImpl implements io.sustc.service.UserService {
             if(re.next()){
                 UserRecord userRecord=new UserRecord(re.getLong("mid"),re.getString("name"),
                         re.getString("sex"),re.getString("birthday"),re.getShort("level"),
-                        re.getInt("coin"),re.getString("sign"),(UserRecord.Identity.valueOf(re.getString("identity"))),
+                        re.getInt("coins"),re.getString("sign"),(UserRecord.Identity.valueOf(re.getString("identity"))),
                         re.getString("password"),re.getString("qq"),re.getString("wechat"));
                 return userRecord;
             }
@@ -298,14 +324,14 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         try{
             con = ConnectionPool.getConnection();
             ResultSet re;
-            String sql = "select * from t_user where mid=?";
+            String sql = "select * from t_user where wechat=?";
             PreparedStatement statement= con.prepareStatement(sql);
             statement.setString(1,wechat);
             re=statement.executeQuery();
             if(re.next()){
                 UserRecord userRecord=new UserRecord(re.getLong("mid"),re.getString("name"),
                         re.getString("sex"),re.getString("birthday"),re.getShort("level"),
-                        re.getInt("coin"),re.getString("sign"),(UserRecord.Identity.valueOf(re.getString("identity"))),
+                        re.getInt("coins"),re.getString("sign"),(UserRecord.Identity.valueOf(re.getString("identity"))),
                         re.getString("password"),re.getString("qq"),re.getString("wechat"));
                 return userRecord;
             }
@@ -360,6 +386,9 @@ public class UserServiceImpl implements io.sustc.service.UserService {
         }
     }
     public boolean check_birthday(String birthday){
+        if(birthday==null||birthday.equals("")){
+            return true;
+        }
         // 使用正则表达式匹配“XX月XX日”格式，月份和日期可以是单个或两个数字
         String regex = "^(0?[1-9]|1[0-2])月(0?[1-9]|[12][0-9]|3[01])日$";
 
