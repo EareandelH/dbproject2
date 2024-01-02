@@ -15,7 +15,7 @@ public class ConnectionPool {
         config.setUsername("checker");
         config.setPassword("123456");
         // 设置连接池其他属性，如最大连接数、最小连接数等
-        config.setMaximumPoolSize(20);
+        config.setMaximumPoolSize(5);
         dataSource = new HikariDataSource(config);
     }
     public static Connection getConnection() throws SQLException {

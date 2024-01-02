@@ -18,6 +18,7 @@ import java.util.Date;
 public class VideoServiceImpl implements io.sustc.service.VideoService {
     @Autowired
     private DataSource dataSource;
+    UserServiceImpl userService=new UserServiceImpl();
     Logger logger =new Logger();
     public String postVideo(AuthInfo auth, PostVideoReq req){
         Connection con=null;
@@ -39,7 +40,6 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
                 return null;
             }
 
-            UserServiceImpl userService=new UserServiceImpl();
             if(!checkUser(auth)){
 //                System.out.println("The auth is invalid");
                 return null;
@@ -113,7 +113,6 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             ResultSet re;
             String sql="delete from videos where bv=? and mid=?";
             PreparedStatement statement=con.prepareStatement(sql);
-            UserServiceImpl userService=new UserServiceImpl();
             if(!checkUser(auth)){
 //                System.out.println("The auth is invalid"+bv);
                 return false;
@@ -161,19 +160,18 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
         try{
             con = ConnectionPool.getConnection();
             ResultSet re;
-            UserServiceImpl userService=new UserServiceImpl();
             String new_title=req.getTitle();
             if(new_title.equals("")){
-                System.out.println("Title cannot be null."+bv);
+//                System.out.println("Title cannot be null."+bv);
                 return false;
             }
             if(!checkUser(auth)){
-                System.out.println("The auth is invalid"+bv);
+//                System.out.println("The auth is invalid"+bv);
                 return false;
             }
             VideoRecord videoRecord = select_BV(bv);
             if(videoRecord==null){
-                System.out.println("Cannot find a video corresponding to the "+bv+".");
+//                System.out.println("Cannot find a video corresponding to the "+bv+".");
                 return false;
             }
             UserRecord userRecord=null;
@@ -198,11 +196,11 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
 //                return false;
 //            }
             if(req.getPublicTime()==null){
-                System.out.println("publictime null"+req+bv);
+//                System.out.println("publictime null"+req+bv);
                 return false;
             }
             if(req.getPublicTime().compareTo(Timestamp.valueOf(LocalDateTime.now()))<0){
-                System.out.println("time afternow"+bv);
+//                System.out.println("time afternow"+bv);
                 return false;
             }
             String new_description=req.getDescription();
@@ -212,17 +210,17 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             float old_duration=videoRecord.getDuration();
             long ownerMid= videoRecord.getOwnerMid();
             if(ownerMid!= userRecord.getMid()){
-                System.out.println("You don't have the authority " +
-                        "to update the video's information"+bv);
+//                System.out.println("You don't have the authority " +
+//                        "to update the video's information"+bv);
                 return false;
             }
             if(Math.abs(old_duration-new_duration)>0){
-                System.out.println("You changed the duration."+bv);
+//                System.out.println("You changed the duration."+bv);
                 return false;
             }
 
             if(old_title.equals(new_title)&&old_duration==new_duration&&(old_description==new_description)){
-                System.out.println("You changed nothing."+bv);
+//                System.out.println("You changed nothing."+bv);
                 return false;
             }
 //            String sql="update video set title = \'"+new_title+"\' , description = \'"+
@@ -241,23 +239,39 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             else if(videoRecord.getReviewer()==-1&&videoRecord.getReviewTime()==null) return false;
 
         }catch (Exception e){
-            System.out.println("try failed "+bv);
+//            System.out.println("try failed "+bv);
             e.printStackTrace();
         }finally {
             ConnectionPool.releaseConnection(con);
         }
-        System.out.println("try out "+bv);
+//        System.out.println("try out "+bv);
         return false;
     }
     public List<String> searchVideo(AuthInfo auth, String keywords, int pageSize, int pageNum){
         Connection con = null;
         try {
             con =dataSource.getConnection();
-            UserServiceImpl userService=new UserServiceImpl();
             List<String> videos=new ArrayList<>();
             Map<String, Integer> relevanceMap = new HashMap<>();
             if(!checkUser(auth)){
 //                System.out.println("The auth is invalid.");
+                return null;
+            }
+            UserRecord userRecord=null;
+            if(auth.getMid()!=0){
+                userRecord=userService.selectUser_mid(auth.getMid());
+//                System.out.println("get userrecord from mid "+userRecord.toString());
+            }
+            else if(auth.getQq()!=null){
+                userRecord=userService.selectUser_qq(auth.getQq());
+//                System.out.println("get userrecord from qq "+userRecord.toString());
+            }
+            else if(auth.getWechat()!=null){
+                userRecord=userService.selectUser_wechat(auth.getWechat());
+//                System.out.println("get userrecord from wechat "+userRecord.toString());
+            }
+            if(userRecord==null){
+//                System.out.println("No user "+auth.toString()+bv);
                 return null;
             }
             if(keywords==null||keywords.equals("")){
@@ -272,17 +286,31 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
 //                System.out.println("PageNum is invalid.");
                 return null;
             }
-            String sql_1="select bv, title, description, name " +
+            String sql_1="select *" +
                     "from videos where lower(title) like ? or lower(description) like ? or lower(name) like ?";
             String[] keywords_list=keywords.toLowerCase().split(" ");
             for(String keyword:keywords_list){
+                if(keyword=="")continue;
                 PreparedStatement statement=con.prepareStatement(sql_1);
+                keyword=keyword.replaceAll("%","\\\\%");
+                keyword=keyword.replaceAll("_","\\\\_");
                 statement.setString(1,"%"+keyword+"%");
                 statement.setString(2,"%"+keyword+"%");
                 statement.setString(3,"%"+keyword+"%");
+//                if(userRecord.getMid()==560103){
+//                    System.out.println(statement);
+//                }
                 ResultSet re = statement.executeQuery();
                 while(re.next()){
                     String bv = re.getString("bv");
+                    Timestamp public_time = re.getTimestamp("public_time");
+                    if(public_time.compareTo(Timestamp.valueOf(LocalDateTime.now()))>0){
+                        continue;
+                    }
+                    Long reviewer = re.getLong("reviewer");
+                    if(reviewer==-1){
+                        continue;
+                    }
                     int relevance = relevanceMap.getOrDefault(bv, 0);
                     relevance += countOccurrences(re.getString("title"), keyword);
                     relevance += countOccurrences(re.getString("description"), keyword);
@@ -296,17 +324,32 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
                 public int compare(String bv1, String bv2) {
                     int relevance_compare=Integer.compare(relevanceMap.get(bv2),relevanceMap.get(bv1));
                     if(relevance_compare==0){
-                        return Integer.compare(video_view(bv2).size(),video_view(bv1).size());
+                        return Integer.compare(video_viewcnt(bv2).size(),video_viewcnt(bv1).size());
                     }
-                    return 0;
+                    return relevance_compare;
                 }
             };
+
             Collections.sort(row,comparator);
+//            if(userRecord.getMid()==560103){
+//                System.out.println(row);
+////                System.out.println(pageNum+"   "+pageSize);
+//            }
             int start_index=(pageNum-1)*pageSize;
             int end_index=Math.min(start_index+pageSize,row.size());
-            for(int i=start_index-1;i<end_index;i++){
+            int i;
+            if(start_index>=1){
+                i=start_index-1;
+            }
+            else {
+                i=0;
+            }
+            for(i=start_index;i<end_index;i++){
                 videos.add(row.get(i));
             }
+//            for(int j=0;j<row.size();j++){
+//                videos.add(row.get(j));
+//            }
             return videos;
         }catch (Exception e){
             e.printStackTrace();
@@ -383,7 +426,6 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
 //            log.info("reviewVideo"+auth.toString()+" "+bv);
             con =ConnectionPool.getConnection();
             ResultSet re;
-            UserServiceImpl userService=new UserServiceImpl();
             if(!checkUser(auth)){
 //                System.out.println("The auth is invalid");
                 return false;
@@ -421,11 +463,10 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
                 return false;
             }
             Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-            String sql ="update video set reviewer="+auth.getMid()+",review_time=\'"+now.toString()+
+            String sql ="update videos set reviewer="+auth.getMid()+",review_time=\'"+now.toString()+
                     "\' where bv=\'"+bv+"\'";
             PreparedStatement statement=con.prepareStatement(sql);
             int affected=statement.executeUpdate();
-
 //            System.out.println("You reviewed the video.");
             return true;
 
@@ -443,7 +484,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
         Connection con=null;
         try{
             con =ConnectionPool.getConnection();
-            UserServiceImpl userService=new UserServiceImpl();
+
             if(!checkUser(auth)){
 //                System.out.println("The auth "+auth.toString()+"is invalid");
                 return false;
@@ -508,7 +549,6 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
         Connection con = null;
         try{
             con =ConnectionPool.getConnection();
-            UserServiceImpl userService=new UserServiceImpl();
             if(!checkUser(auth)){
 //                System.out.println("The auth is invalid");
                 return false;
@@ -572,7 +612,6 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
         Connection con =null;
         try{
             con =ConnectionPool.getConnection();
-            UserServiceImpl userService=new UserServiceImpl();
             if(!checkUser(auth)){
 //                System.out.println("The auth is invalid");
                 return false;
@@ -695,7 +734,7 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             statement.setString(1,title);
             statement.setLong(2,mid);
             re=statement.executeQuery();
-            log.info("SQL:{}",statement);
+//            log.info("SQL:{}",statement);
             if(re.next()){
                 VideoRecord video= new VideoRecord(re.getString("bv"),re.getString("title"),
                         re.getLong("mid"),re.getString("name"),re.getTimestamp("commit_time"),
@@ -748,6 +787,28 @@ public class VideoServiceImpl implements io.sustc.service.VideoService {
             re=statement.executeQuery();
             while(re.next()){
                 long temp = re.getLong("view");
+                view_Array.add(temp);
+            }
+            return view_Array;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            ConnectionPool.releaseConnection(con);
+        }
+        return null;
+    }
+    public ArrayList<Long> video_viewcnt(String bv){
+        Connection con = null;
+        try{
+            con = ConnectionPool.getConnection();
+            ResultSet re;
+            ArrayList<Long> view_Array=new ArrayList<>();
+            String sql="select mid from View where bv=?";
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setString(1,bv);
+            re=statement.executeQuery();
+            while(re.next()){
+                long temp = re.getLong("mid");
                 view_Array.add(temp);
             }
             return view_Array;
